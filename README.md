@@ -69,7 +69,7 @@ npm run db:migrate
 
 ## Deployment
 
-Deployments are handled by GitHub Actions on pushes to `main`.
+Deployments are handled by GitHub Actions on pushes to `master`.
 
 Required GitHub Actions secrets:
 

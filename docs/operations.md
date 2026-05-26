@@ -46,7 +46,7 @@ npm run db:migrate
 
 ## CI/CD
 
-GitHub Actions runs verification on pull requests and pushes. Pushes to `main`
+GitHub Actions runs verification on pull requests and pushes. Pushes to `master`
 also apply production D1 migrations and deploy the Worker.
 
 Required repository secrets:
