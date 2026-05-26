@@ -25,6 +25,13 @@ crons = [
 
 ## D1
 
+The production D1 database is `koriyama-open-data-hub-prod` and is bound as
+`DB` in `wrangler.toml`.
+
+`wrangler` is provided by mise for this repository. Prefer package scripts or
+direct `wrangler ...` commands from the mise-managed environment; avoid
+`npx wrangler ...` unless running outside the repository toolchain.
+
 Local migration:
 
 ```sh
@@ -36,3 +43,16 @@ Production migration:
 ```sh
 npm run db:migrate
 ```
+
+## CI/CD
+
+GitHub Actions runs verification on pull requests and pushes. Pushes to `main`
+also apply production D1 migrations and deploy the Worker.
+
+Required repository secrets:
+
+- `CLOUDFLARE_ACCOUNT_ID`
+- `CLOUDFLARE_API_TOKEN`
+
+Use a Cloudflare API token scoped to the deployment account. The token must be
+able to deploy Workers and apply D1 migrations.

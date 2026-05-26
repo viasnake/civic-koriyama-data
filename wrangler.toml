@@ -13,5 +13,5 @@ crons = [
 
 [[d1_databases]]
 binding = "DB"
-database_name = "koriyama_open_data_hub"
-database_id = "00000000-0000-0000-0000-000000000000"
+database_name = "koriyama-open-data-hub-prod"
+database_id = "cb6e3e65-f79c-469c-906e-875f36ffe911"

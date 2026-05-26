@@ -8,8 +8,8 @@
     "deploy": "wrangler deploy",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "db:migrate:local": "wrangler d1 migrations apply koriyama_open_data_hub --local",
-    "db:migrate": "wrangler d1 migrations apply koriyama_open_data_hub"
+    "db:migrate:local": "wrangler d1 migrations apply DB --local",
+    "db:migrate": "wrangler d1 migrations apply DB --remote"
   },
   "dependencies": {
     "@hono/zod-validator": "^0.7.3",
@@ -27,7 +27,6 @@
     "@types/react": "^19.2.15",
     "@types/react-dom": "^19.2.3",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.14",
-    "wrangler": "^4.56.0"
+    "vitest": "^4.0.14"
   }
 }
