@@ -1,0 +1,17 @@
+name = "koriyama-open-data-hub"
+main = "src/index.ts"
+compatibility_date = "2026-05-25"
+
+[observability]
+enabled = true
+
+[triggers]
+crons = [
+  "0 18 * * *",
+  "0 * * * *"
+]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "koriyama_open_data_hub"
+database_id = "00000000-0000-0000-0000-000000000000"

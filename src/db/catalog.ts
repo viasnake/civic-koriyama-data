@@ -1,0 +1,118 @@
+import { parse } from "yaml";
+import type { DatasetCatalog, DatasetCatalogItem, RssCategory } from "../types";
+
+export const KORIYAMA_CATALOG_YAML = `version: 1
+source:
+  id: koriyama_city
+  name: 郡山市
+  type: municipality
+  official_site: https://www.city.koriyama.lg.jp/
+datasets:
+  - id: public_facilities
+    name: 公共施設一覧
+    source_page: opendata_index
+    source_type: file
+    format: csv_or_xlsx
+    category: facility
+    enabled: true
+    normalize_as: place
+    public_api: true
+  - id: aed
+    name: AED設置個所一覧
+    source_page: opendata_index
+    source_type: file
+    format: csv_or_xlsx
+    category: safety
+    enabled: true
+    normalize_as: place
+    public_api: true
+  - id: public_wifi
+    name: 公衆無線LANアクセスポイント一覧
+    source_page: opendata_index
+    source_type: file
+    format: csv_or_xlsx
+    category: facility
+    enabled: true
+    normalize_as: place
+    public_api: true
+  - id: public_toilets
+    name: 公衆トイレ一覧
+    source_page: opendata_index
+    source_type: file
+    format: csv_or_xlsx
+    category: facility
+    enabled: true
+    normalize_as: place
+    public_api: true
+  - id: childcare_facilities
+    name: 子育て施設一覧
+    source_page: opendata_index
+    source_type: file
+    format: csv_or_xlsx
+    category: childcare
+    enabled: true
+    normalize_as: place
+    public_api: true
+  - id: medical_institutions
+    name: 医療機関一覧
+    source_page: opendata_index
+    source_type: file
+    format: csv_or_xlsx
+    category: medical
+    enabled: true
+    normalize_as: place
+    public_api: true
+  - id: schools
+    name: 学校一覧
+    source_page: opendata_index
+    source_type: file
+    format: csv_or_xlsx
+    category: education
+    enabled: true
+    normalize_as: place
+    public_api: true
+  - id: shelters
+    name: 指定緊急避難場所一覧
+    source_page: opendata_index
+    source_type: file
+    format: csv_or_xlsx
+    category: disaster
+    enabled: true
+    normalize_as: place
+    public_api: true
+    warnings:
+      - disaster_data
+rss_categories:
+  - id: disaster
+    name: 防災・安全
+    keywords: [防災, 災害, 避難, 警報, 注意報, 熱中症]
+  - id: childcare
+    name: 子育て・教育
+    keywords: [子育て, 保育, 幼稚園, 学校, 児童, 妊娠]
+  - id: life
+    name: くらし・手続き
+    keywords: [住民票, 戸籍, 税, ごみ, 国民健康保険, マイナンバー]
+  - id: business
+    name: 事業者向け
+    keywords: [入札, 補助金, 契約, 事業者, 募集]
+  - id: event
+    name: イベント
+    keywords: [イベント, 講座, 参加者募集, 展示, スポーツ]
+  - id: city_admin
+    name: 市政情報
+    keywords: [市議会, 審議会, 計画, パブリックコメント]
+`;
+
+export const catalog = parse(KORIYAMA_CATALOG_YAML) as DatasetCatalog;
+
+export function listPublicDatasets(): DatasetCatalogItem[] {
+  return catalog.datasets.filter((dataset) => dataset.enabled && dataset.public_api);
+}
+
+export function findDataset(datasetId: string): DatasetCatalogItem | undefined {
+  return catalog.datasets.find((dataset) => dataset.id === datasetId);
+}
+
+export function listRssCategories(): RssCategory[] {
+  return catalog.rss_categories;
+}

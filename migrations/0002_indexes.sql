@@ -1,0 +1,10 @@
+create index if not exists idx_datasets_public_api on datasets(public_api, enabled);
+create index if not exists idx_raw_records_dataset_id on raw_records(dataset_id);
+create index if not exists idx_places_dataset_id on places(dataset_id);
+create index if not exists idx_places_category on places(category);
+create index if not exists idx_places_location on places(lat, lng);
+create index if not exists idx_places_name on places(name);
+create index if not exists idx_record_changes_changed_at on record_changes(changed_at);
+create index if not exists idx_rss_entries_category on rss_entries(category);
+create index if not exists idx_rss_entries_published_at on rss_entries(published_at);
+create index if not exists idx_fetch_logs_source on fetch_logs(source_type, source_id, fetched_at);
