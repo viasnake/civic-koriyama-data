@@ -4,9 +4,10 @@ import { CORS_HEADERS, jsonResponse } from "./constants";
 import { changeRoutes } from "./routes/changes";
 import { datasetRoutes } from "./routes/datasets";
 import { healthRoutes } from "./routes/health";
-import { placeRoutes } from "./routes/places";
+import { placeRoutes, placesGeoJsonResponse } from "./routes/places";
 import { rssRoutes } from "./routes/rss";
 import { searchRoutes } from "./routes/search";
+import { countTable } from "./db/queries";
 import { ingestOpenData } from "./jobs/ingest";
 import { ingestRss } from "./jobs/rss";
 import type { Bindings } from "./types";
@@ -46,6 +47,14 @@ app.get("/", () =>
 const api = new Hono<{ Bindings: Bindings }>();
 api.route("/health", healthRoutes);
 api.route("/datasets", datasetRoutes);
+api.get("/places.geojson", async (c) =>
+  placesGeoJsonResponse(c.env.DB, {
+    dataset_id: c.req.query("dataset_id"),
+    category: c.req.query("category"),
+    q: c.req.query("q"),
+    bbox: c.req.query("bbox"),
+  }),
+);
 api.route("/places", placeRoutes);
 api.route("/search", searchRoutes);
 api.route("/rss", rssRoutes);
@@ -59,6 +68,11 @@ export function shouldIngestOpenData(scheduledAt: Date): boolean {
   return scheduledAt.getUTCHours() === OPEN_DATA_INGEST_UTC_HOUR;
 }
 
+async function shouldSelfHealOpenData(db: D1Database): Promise<boolean> {
+  const [rawRecordsCount, placesCount] = await Promise.all([countTable(db, "raw_records"), countTable(db, "places")]);
+  return rawRecordsCount === 0 || placesCount === 0;
+}
+
 async function runScheduledJobs(event: ScheduledEvent, env: Bindings): Promise<void> {
   const failures: unknown[] = [];
 
@@ -68,7 +82,7 @@ async function runScheduledJobs(event: ScheduledEvent, env: Bindings): Promise<v
     failures.push(error);
   }
 
-  if (shouldIngestOpenData(new Date(event.scheduledTime))) {
+  if (shouldIngestOpenData(new Date(event.scheduledTime)) || (await shouldSelfHealOpenData(env.DB))) {
     try {
       await ingestOpenData(env.DB);
     } catch (error) {

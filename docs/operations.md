@@ -18,6 +18,10 @@ day when the scheduled UTC hour is `18` (JST 03:00). Keep the trigger hourly so
 RSS stays fresh; change the open data hour in `src/index.ts` if the daily
 ingestion time must move.
 
+There is intentionally no public admin endpoint for forcing jobs. If
+`raw_records` or `places` is empty, the hourly scheduled handler self-heals by
+running open data ingestion without waiting for the daily hour.
+
 ## Fetch Policy
 
 - Use ETag / Last-Modified when source fetchers expose them.
