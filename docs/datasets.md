@@ -15,5 +15,9 @@ Initial place datasets:
 - `schools`
 - `shelters`
 
-Disaster datasets can be exposed by API but should not be promoted as the main
-UI path without clear warnings.
+`shelters` points to the official disaster open data page, but the current
+official files are zipped shapefiles. They are exposed as source metadata and
+marked with warnings until shapefile-to-place normalization is implemented.
+
+CSV-backed public facility datasets are ingested into `raw_records` and
+normalized into `places` during the open data cron.

@@ -2,12 +2,23 @@ export type Bindings = {
   DB: D1Database;
 };
 
+export type DatasetSourceFile = {
+  label: string;
+  url: string;
+  file_type: "csv" | "xlsx" | "zip";
+  encoding?: string;
+  normalize: boolean;
+  warnings?: string[];
+};
+
 export type DatasetCatalogItem = {
   id: string;
   name: string;
   source_page: string;
+  source_page_url?: string;
+  source_files?: DatasetSourceFile[];
   source_type: "file";
-  format: "csv_or_xlsx";
+  format: "csv_or_xlsx" | "zip" | "mixed";
   category: string;
   enabled: boolean;
   normalize_as: "place";

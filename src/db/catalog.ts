@@ -1,5 +1,87 @@
 import { parse } from "yaml";
-import type { DatasetCatalog, DatasetCatalogItem, RssCategory } from "../types";
+import {
+  KORIYAMA_DISASTER_OPEN_DATA_URL,
+  KORIYAMA_PUBLIC_FACILITIES_URL,
+} from "../sources/koriyama";
+import type { DatasetCatalog, DatasetCatalogItem, DatasetSourceFile, RssCategory } from "../types";
+
+const ATTACHMENT_BASE_URL = "https://www.city.koriyama.lg.jp/uploaded/attachment";
+
+function csv(id: number, label: string): DatasetSourceFile {
+  return {
+    label,
+    url: `${ATTACHMENT_BASE_URL}/${id}.csv`,
+    file_type: "csv",
+    encoding: "shift_jis",
+    normalize: true,
+  };
+}
+
+function zip(id: number, label: string, warnings: string[]): DatasetSourceFile {
+  return {
+    label,
+    url: `${ATTACHMENT_BASE_URL}/${id}.zip`,
+    file_type: "zip",
+    normalize: false,
+    warnings,
+  };
+}
+
+const PUBLIC_FACILITY_FILES = [
+  csv(1705, "市の行政サービス"),
+  csv(1706, "ふれあいセンター・コミュニティセンター"),
+  csv(1707, "公民館"),
+  csv(1708, "保健所"),
+  csv(1709, "病院"),
+  csv(1710, "福祉・子育て支援施設"),
+  csv(1711, "働く人のための施設"),
+  csv(1712, "上下水道局"),
+  csv(1713, "衛生"),
+  csv(1714, "霊園"),
+  csv(1715, "火葬場"),
+  csv(1716, "消防"),
+  csv(1717, "郡山水防センター"),
+  csv(1718, "保育所（認可保育所）"),
+  csv(1719, "その他の私立保育園"),
+  csv(1720, "幼稚園（私立幼稚園）"),
+  csv(1721, "小学校"),
+  csv(1722, "中学校"),
+  csv(1723, "文化・教育・社会施設"),
+  csv(1724, "スポーツ施設"),
+  csv(1725, "観光・産業施設"),
+  csv(1726, "市営住宅"),
+];
+
+const DATASET_SOURCE_FILES: Record<string, DatasetSourceFile[]> = {
+  public_facilities: PUBLIC_FACILITY_FILES,
+  aed: [csv(1727, "AED設置施設")],
+  public_wifi: [csv(1728, "Wi-Fi設置施設")],
+  public_toilets: [csv(1729, "オストメイト対応トイレ設置施設")],
+  childcare_facilities: [
+    csv(1710, "福祉・子育て支援施設"),
+    csv(1718, "保育所（認可保育所）"),
+    csv(1719, "その他の私立保育園"),
+    csv(1720, "幼稚園（私立幼稚園）"),
+  ],
+  medical_institutions: [csv(1708, "保健所"), csv(1709, "病院")],
+  schools: [csv(1721, "小学校"), csv(1722, "中学校")],
+  shelters: [
+    zip(1627, "指定避難場所", ["unsupported_shapefile_zip"]),
+    zip(1637, "緊急避難場所", ["unsupported_shapefile_zip"]),
+    zip(1638, "収容避難場所", ["unsupported_shapefile_zip"]),
+  ],
+};
+
+const DATASET_SOURCE_PAGES: Record<string, string> = {
+  public_facilities: KORIYAMA_PUBLIC_FACILITIES_URL,
+  aed: KORIYAMA_PUBLIC_FACILITIES_URL,
+  public_wifi: KORIYAMA_PUBLIC_FACILITIES_URL,
+  public_toilets: KORIYAMA_PUBLIC_FACILITIES_URL,
+  childcare_facilities: KORIYAMA_PUBLIC_FACILITIES_URL,
+  medical_institutions: KORIYAMA_PUBLIC_FACILITIES_URL,
+  schools: KORIYAMA_PUBLIC_FACILITIES_URL,
+  shelters: KORIYAMA_DISASTER_OPEN_DATA_URL,
+};
 
 export const KORIYAMA_CATALOG_YAML = `version: 1
 source:
@@ -73,9 +155,9 @@ datasets:
     public_api: true
   - id: shelters
     name: 指定緊急避難場所一覧
-    source_page: opendata_index
+    source_page: opendata_disaster
     source_type: file
-    format: csv_or_xlsx
+    format: zip
     category: disaster
     enabled: true
     normalize_as: place
@@ -103,7 +185,7 @@ rss_categories:
     keywords: [市議会, 審議会, 計画, パブリックコメント]
 `;
 
-export const catalog = parse(KORIYAMA_CATALOG_YAML) as DatasetCatalog;
+export const catalog = enrichCatalog(parse(KORIYAMA_CATALOG_YAML) as DatasetCatalog);
 
 export function listPublicDatasets(): DatasetCatalogItem[] {
   return catalog.datasets.filter((dataset) => dataset.enabled && dataset.public_api);
@@ -115,4 +197,15 @@ export function findDataset(datasetId: string): DatasetCatalogItem | undefined {
 
 export function listRssCategories(): RssCategory[] {
   return catalog.rss_categories;
+}
+
+function enrichCatalog(input: DatasetCatalog): DatasetCatalog {
+  return {
+    ...input,
+    datasets: input.datasets.map((dataset) => ({
+      ...dataset,
+      source_page_url: DATASET_SOURCE_PAGES[dataset.id],
+      source_files: DATASET_SOURCE_FILES[dataset.id] ?? [],
+    })),
+  };
 }

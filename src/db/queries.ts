@@ -2,6 +2,9 @@ import type { DatasetCatalogItem, Place, RawRecord, RssEntry } from "../types";
 
 type DatasetRow = Omit<DatasetCatalogItem, "enabled" | "public_api" | "source_type" | "format" | "normalize_as"> & {
   source_page: string;
+  source_page_url: string | null;
+  source_file_url: string | null;
+  source_file_type: string | null;
   source_type: string;
   format: string;
   enabled: number;
@@ -15,9 +18,12 @@ export async function listDatasets(db: D1Database): Promise<DatasetCatalogItem[]
       `select
         id,
         name,
-        'opendata_index' as source_page,
+        source_page_url,
+        source_file_url,
+        source_file_type,
+        coalesce(source_page_url, 'opendata_index') as source_page,
         'file' as source_type,
-        'csv_or_xlsx' as format,
+        coalesce(source_file_type, 'csv_or_xlsx') as format,
         category,
         enabled,
         normalize_as,
@@ -32,8 +38,19 @@ export async function listDatasets(db: D1Database): Promise<DatasetCatalogItem[]
     id: dataset.id,
     name: dataset.name,
     source_page: dataset.source_page,
+    source_page_url: dataset.source_page_url ?? undefined,
+    source_files: dataset.source_file_url
+      ? [
+          {
+            label: dataset.name,
+            url: dataset.source_file_url,
+            file_type: dataset.source_file_type === "zip" ? "zip" : dataset.source_file_type === "xlsx" ? "xlsx" : "csv",
+            normalize: dataset.source_file_type !== "zip",
+          },
+        ]
+      : undefined,
     source_type: "file",
-    format: "csv_or_xlsx",
+    format: dataset.format === "zip" ? "zip" : dataset.format === "mixed" ? "mixed" : "csv_or_xlsx",
     category: dataset.category,
     normalize_as: "place",
     enabled: dataset.enabled === 1,
@@ -47,9 +64,12 @@ export async function getDataset(db: D1Database, datasetId: string): Promise<Dat
       `select
         id,
         name,
-        'opendata_index' as source_page,
+        source_page_url,
+        source_file_url,
+        source_file_type,
+        coalesce(source_page_url, 'opendata_index') as source_page,
         'file' as source_type,
-        'csv_or_xlsx' as format,
+        coalesce(source_file_type, 'csv_or_xlsx') as format,
         category,
         enabled,
         normalize_as,
@@ -65,8 +85,19 @@ export async function getDataset(db: D1Database, datasetId: string): Promise<Dat
     id: dataset.id,
     name: dataset.name,
     source_page: dataset.source_page,
+    source_page_url: dataset.source_page_url ?? undefined,
+    source_files: dataset.source_file_url
+      ? [
+          {
+            label: dataset.name,
+            url: dataset.source_file_url,
+            file_type: dataset.source_file_type === "zip" ? "zip" : dataset.source_file_type === "xlsx" ? "xlsx" : "csv",
+            normalize: dataset.source_file_type !== "zip",
+          },
+        ]
+      : undefined,
     source_type: "file",
-    format: "csv_or_xlsx",
+    format: dataset.format === "zip" ? "zip" : dataset.format === "mixed" ? "mixed" : "csv_or_xlsx",
     category: dataset.category,
     normalize_as: "place",
     enabled: dataset.enabled === 1,

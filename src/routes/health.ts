@@ -16,6 +16,14 @@ healthRoutes.get("/", async (c) => {
     "select fetched_at from fetch_logs where source_type = 'opendata' and status in ('ok', 'catalog_seeded') order by fetched_at desc limit 1",
   ).first<{ fetched_at: string }>();
 
+  const failedOpenDataFetches = await c.env.DB.prepare(
+    `select source_id, fetched_at, error_message
+      from fetch_logs
+      where source_type = 'opendata' and status = 'error'
+      order by fetched_at desc
+      limit 10`,
+  ).all<{ source_id: string; fetched_at: string; error_message: string | null }>();
+
   const lastRssFetch = await c.env.DB.prepare(
     "select fetched_at from fetch_logs where source_type = 'rss' and status = 'ok' order by fetched_at desc limit 1",
   ).first<{ fetched_at: string }>();
@@ -26,7 +34,7 @@ healthRoutes.get("/", async (c) => {
       total: datasetSummary?.total ?? 0,
       enabled: datasetSummary?.enabled ?? 0,
       last_success_at: lastOpenDataFetch?.fetched_at ?? null,
-      failed: [],
+      failed: failedOpenDataFetches.results,
     },
     rss: {
       last_success_at: lastRssFetch?.fetched_at ?? null,
