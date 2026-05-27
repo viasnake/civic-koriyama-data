@@ -15,9 +15,10 @@ export function parseRss(xml: string): ParsedRssEntry[] {
   const document = parser.parse(xml) as {
     rss?: { channel?: { item?: unknown[] | unknown } };
     feed?: { entry?: unknown[] | unknown };
+    "rdf:RDF"?: { item?: unknown[] | unknown };
   };
 
-  const items = normalizeArray(document.rss?.channel?.item ?? document.feed?.entry);
+  const items = normalizeArray(document.rss?.channel?.item ?? document.feed?.entry ?? document["rdf:RDF"]?.item);
 
   return items.flatMap((item) => {
     if (!isRecord(item)) return [];
@@ -29,7 +30,7 @@ export function parseRss(xml: string): ParsedRssEntry[] {
       {
         title,
         link,
-        publishedAt: textValue(item.pubDate ?? item.published ?? item.updated),
+        publishedAt: textValue(item.pubDate ?? item.published ?? item.updated ?? item["dc:date"]),
       },
     ];
   });
