@@ -100,3 +100,7 @@ export type RssEntry = {
   tags_json: string;
   source_hash: string;
 };
+
+export type RssEntryResponse = RssEntry & {
+  tags: string[];
+};

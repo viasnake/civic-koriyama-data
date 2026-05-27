@@ -4,6 +4,7 @@ export type ParsedRssEntry = {
   title: string;
   link: string;
   publishedAt: string | null;
+  sourceCategories: string[];
 };
 
 const parser = new XMLParser({
@@ -31,9 +32,19 @@ export function parseRss(xml: string): ParsedRssEntry[] {
         title,
         link,
         publishedAt: textValue(item.pubDate ?? item.published ?? item.updated ?? item["dc:date"]),
+        sourceCategories: sourceCategories(item),
       },
     ];
   });
+}
+
+function sourceCategories(item: Record<string, unknown>): string[] {
+  return [
+    textValue(item["dc:subject"]),
+    textValue(item["nc:category01"]),
+    textValue(item["nc:category02"]),
+    textValue(item["nc:category03"]),
+  ].flatMap((value) => (value ? [value] : []));
 }
 
 function normalizeArray(value: unknown): unknown[] {

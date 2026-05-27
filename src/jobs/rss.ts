@@ -40,7 +40,7 @@ export async function ingestRss(db: D1Database): Promise<void> {
     await db.batch(
       await Promise.all(
         entries.map(async (entry) => {
-          const classification = classifyRssEntry(entry.title);
+          const classification = classifyRssEntry(entry.title, entry.sourceCategories);
           const sourceHash = await sha256Hex(`${entry.title}|${entry.link}|${entry.publishedAt ?? ""}`);
           const id = `rss_${sourceHash.slice(0, 16)}`;
 

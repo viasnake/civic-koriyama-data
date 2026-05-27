@@ -34,6 +34,12 @@ Every JSON endpoint returns:
 - `GET /api/v2/changes`
 - `GET /api/v2/rss/entries`
 
+## RSS Entries
+
+`GET /api/v2/rss/entries` returns RSS entries with `tags` as a parsed string
+array. `tags_json` remains in the response for backward compatibility with
+existing clients.
+
 ## Places Filters
 
 - `dataset_id`
