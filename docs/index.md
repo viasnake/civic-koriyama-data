@@ -15,10 +15,13 @@ Koriyama Open Data Hub は、郡山市が公開しているオープンデータ
 | 項目 | 値 |
 | --- | --- |
 | 公開 URL | <https://koriyama-open-data-hub.alflag.org/> |
+| 旧称 | 郡山市オープンデータ非公式 WebAPI |
 | API バージョン | `2.0` |
 | API ベースパス | `/api/v2` |
 | API ベース URL | <https://koriyama-open-data-hub.alflag.org/api/v2> |
 | レスポンス形式 | JSON、GeoJSON |
+
+旧 v1 API は提供を終了しています。現在は `/api/v2` を利用してください。
 
 ## すぐ試す
 
