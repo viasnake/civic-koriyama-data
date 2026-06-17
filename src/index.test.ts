@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { PUBLIC_API_BASE_URL } from "./constants";
 import { app, shouldIngestOpenData } from "./index";
+import { API_RATE_LIMIT_REQUESTS, API_RATE_LIMIT_WINDOW_SECONDS } from "./middleware/rateLimit";
+import type { Bindings } from "./types";
 
 type ServiceInfoResponse = {
   data: {
@@ -11,6 +13,22 @@ type ServiceInfoResponse = {
     endpoints: string[];
   };
 };
+
+function createEnv(rateLimiter: RateLimit): Bindings {
+  return {
+    API_RATE_LIMITER: rateLimiter,
+    DB: {} as D1Database,
+  };
+}
+
+function allowAllRateLimiter(calls: RateLimitOptions[] = []): RateLimit {
+  return {
+    async limit(options) {
+      calls.push(options);
+      return { success: true };
+    },
+  };
+}
 
 describe("root route", () => {
   it("redirects to the documentation", async () => {
@@ -23,7 +41,7 @@ describe("root route", () => {
 
 describe("api root route", () => {
   it("returns service information", async () => {
-    const response = await app.request("/api/v2");
+    const response = await app.request("/api/v2", {}, createEnv(allowAllRateLimiter()));
     const body = (await response.json()) as ServiceInfoResponse;
 
     expect(response.status).toBe(200);
@@ -34,6 +52,39 @@ describe("api root route", () => {
     });
     expect(body.data.repository_url).toBeUndefined();
     expect(body.data.endpoints).toContain("/api/v2/health");
+  });
+
+  it("rate limits API requests by client IP", async () => {
+    const calls: RateLimitOptions[] = [];
+    const response = await app.request(
+      "/api/v2",
+      { headers: { "CF-Connecting-IP": "203.0.113.10" } },
+      createEnv(allowAllRateLimiter(calls)),
+    );
+
+    expect(response.status).toBe(200);
+    expect(calls).toEqual([{ key: "api:v2:203.0.113.10" }]);
+  });
+
+  it("returns 429 when the API rate limit is exceeded", async () => {
+    const response = await app.request(
+      "/api/v2",
+      { headers: { "CF-Connecting-IP": "203.0.113.10" } },
+      createEnv({
+        async limit() {
+          return { success: false };
+        },
+      }),
+    );
+    const body = (await response.json()) as { data: { error: string; limit: number; retry_after_seconds: number } };
+
+    expect(response.status).toBe(429);
+    expect(response.headers.get("Retry-After")).toBe(API_RATE_LIMIT_WINDOW_SECONDS.toString());
+    expect(body.data).toMatchObject({
+      error: "rate_limited",
+      limit: API_RATE_LIMIT_REQUESTS,
+      retry_after_seconds: API_RATE_LIMIT_WINDOW_SECONDS,
+    });
   });
 });
 
