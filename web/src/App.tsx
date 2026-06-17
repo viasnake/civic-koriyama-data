@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { PUBLIC_API_BASE_URL } from "../../src/constants";
 
 type Dataset = {
   id: string;
@@ -10,7 +11,7 @@ export default function App() {
   const [datasets, setDatasets] = useState<Dataset[]>([]);
 
   useEffect(() => {
-    fetch("/api/v2/datasets")
+    fetch(`${PUBLIC_API_BASE_URL}/datasets`)
       .then((response) => response.json())
       .then((payload) => setDatasets((payload as { data: Dataset[] }).data))
       .catch(() => setDatasets([]));

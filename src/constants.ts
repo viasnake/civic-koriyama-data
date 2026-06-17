@@ -1,6 +1,8 @@
 import type { ApiMeta } from "./types";
 
 export const API_VERSION = "2.0" as const;
+export const PUBLIC_API_ENDPOINT = "https://koriyama-open-data-hub.alflag.org/" as const;
+export const PUBLIC_API_BASE_URL = new URL("api/v2", PUBLIC_API_ENDPOINT).toString();
 
 export function createMeta(now = new Date()): ApiMeta {
   return {

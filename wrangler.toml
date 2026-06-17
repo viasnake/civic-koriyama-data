@@ -2,6 +2,9 @@ name = "koriyama-open-data-hub"
 main = "src/index.ts"
 compatibility_date = "2026-05-25"
 
+[assets]
+directory = "./public"
+
 [observability]
 enabled = true
 

@@ -1,10 +1,6 @@
-# Koriyama Open Data Hub
+# 郡山市オープンデータ非公式 WebAPI
 
-郡山市オープンデータ非公式 Webapi v2 の実装リポジトリです。
-
-このプロジェクトは郡山市公式サービスではありません。郡山市が公開する
-オープンデータと RSS を、安定した dataset id、JSON API、GeoJSON、
-検索 UI で利用しやすくするための非公式データ流通レイヤーです。
+郡山市オープンデータ非公式 WebAPI の実装リポジトリです。
 
 ## Status
 
@@ -22,10 +18,12 @@ Initial API MVP scaffold.
 ## API
 
 The public API is versioned under `/api/v2`.
+The canonical public endpoint is `https://koriyama-open-data-hub.alflag.org/`.
 
 Implemented routes:
 
 - `GET /`
+- `GET /docs/`
 - `GET /api/v2/health`
 - `GET /api/v2/datasets`
 - `GET /api/v2/datasets/:dataset_id`
@@ -42,10 +40,16 @@ Implemented routes:
 ```sh
 mise install
 npm install
+python -m pip install -r docs/requirements.txt
 npm test
 npm run typecheck
+npm run docs:build
 npm run dev
 ```
+
+When documentation sources change, rebuild `public/docs` with
+`npm run docs:build` before committing so the Worker static assets stay in
+sync with the Sphinx source.
 
 `wrangler` is managed by mise. Prefer `wrangler ...` through the mise-managed
 toolchain instead of `npx wrangler ...`.
@@ -86,7 +90,8 @@ membership, zone, DNS, Pages, KV, R2, or queue permissions for this workflow.
 
 The workflow installs the mise-managed toolchain, runs `npm ci`, typechecks,
 runs tests, applies remote D1 migrations through the `DB` binding, and then
-deploys the Worker.
+deploys the Worker. Wrangler serves the checked-in Sphinx HTML under
+`public/docs` as static assets at `/docs/`.
 
 ## Source And Attribution
 
@@ -98,7 +103,8 @@ See:
 
 ## Disclaimer
 
-このサービスは非公式です。郡山市公式サービスではありません。
+このリポジトリは非公式です。
+郡山市公式リポジトリではありません。
 
 データの正確性、完全性、最新性、可用性は保証しません。正確な内容は必ず
 郡山市公式ウェブサイトで確認してください。

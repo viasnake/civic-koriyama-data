@@ -1,9 +1,11 @@
 import { describe, expect, it } from "vitest";
+import { PUBLIC_API_ENDPOINT } from "./constants";
 import { app, shouldIngestOpenData } from "./index";
 
 type RootResponse = {
   data: {
     name: string;
+    api_endpoint: string;
     api_base_path: string;
     repository_url?: string;
     endpoints: string[];
@@ -19,6 +21,7 @@ describe("root route", () => {
     expect(response.headers.get("location")).toBeNull();
     expect(body.data).toMatchObject({
       name: "Koriyama Open Data Hub",
+      api_endpoint: PUBLIC_API_ENDPOINT,
       api_base_path: "/api/v2",
     });
     expect(body.data.repository_url).toBeUndefined();

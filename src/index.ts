@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
-import { CORS_HEADERS, jsonResponse } from "./constants";
+import { CORS_HEADERS, jsonResponse, PUBLIC_API_ENDPOINT } from "./constants";
 import { changeRoutes } from "./routes/changes";
 import { datasetRoutes } from "./routes/datasets";
 import { healthRoutes } from "./routes/health";
@@ -31,8 +31,11 @@ app.get("/", () =>
     name: "Koriyama Open Data Hub",
     description:
       "Unofficial API for Koriyama City open data, RSS entries, places, and GeoJSON.",
+    api_endpoint: PUBLIC_API_ENDPOINT,
     api_base_path: "/api/v2",
+    documentation_url: new URL("docs/", PUBLIC_API_ENDPOINT).toString(),
     endpoints: [
+      "/docs/",
       "/api/v2/health",
       "/api/v2/datasets",
       "/api/v2/places",
@@ -43,6 +46,8 @@ app.get("/", () =>
     ],
   }),
 );
+
+app.get("/docs", (c) => c.redirect("/docs/"));
 
 const api = new Hono<{ Bindings: Bindings }>();
 api.route("/health", healthRoutes);
