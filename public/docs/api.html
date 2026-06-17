@@ -84,26 +84,37 @@ data-aria-dark="オートカラーモードに切り替える">
       <i class="i-lucide close"></i>
     </button>
     <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>このページについて</h3><ul>
-<li><a class="reference internal" href="#id1">&#20849;&#36890;&#12524;&#12473;&#12509;&#12531;&#12473;</a></li>
-<li><a class="reference internal" href="#id2">&#12506;&#12540;&#12472;&#12531;&#12464;</a></li>
-<li><a class="reference internal" href="#id3">&#12456;&#12531;&#12489;&#12509;&#12452;&#12531;&#12488;&#19968;&#35239;</a></li>
-<li><a class="reference internal" href="#id4">&#12487;&#12540;&#12479;&#12475;&#12483;&#12488;</a><ul>
+<li><a class="reference internal" href="#id1">&#12456;&#12531;&#12488;&#12522;&#12509;&#12452;&#12531;&#12488;</a></li>
+<li><a class="reference internal" href="#id2">&#20849;&#36890;&#20181;&#27096;</a><ul>
+<li><a class="reference internal" href="#http">HTTP &#12513;&#12477;&#12483;&#12489;</a></li>
+<li><a class="reference internal" href="#json">JSON &#12524;&#12473;&#12509;&#12531;&#12473;</a></li>
+<li><a class="reference internal" href="#geojson">GeoJSON &#12524;&#12473;&#12509;&#12531;&#12473;</a></li>
+<li><a class="reference internal" href="#id3">&#12506;&#12540;&#12472;&#12531;&#12464;</a></li>
+<li><a class="reference internal" href="#id4">&#12456;&#12521;&#12540;</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id5">&#12456;&#12531;&#12489;&#12509;&#12452;&#12531;&#12488;&#19968;&#35239;</a></li>
+<li><a class="reference internal" href="#id6">&#12469;&#12540;&#12499;&#12473;&#24773;&#22577;</a><ul>
+<li><a class="reference internal" href="#get-api-v2"><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/api/v2</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id7">&#12487;&#12540;&#12479;&#12475;&#12483;&#12488;</a><ul>
 <li><a class="reference internal" href="#get-api-v2-datasets"><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/api/v2/datasets</span></code></a></li>
 <li><a class="reference internal" href="#get-api-v2-datasets-dataset-id"><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/api/v2/datasets/{dataset_id}</span></code></a></li>
 <li><a class="reference internal" href="#get-api-v2-datasets-dataset-id-records"><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/api/v2/datasets/{dataset_id}/records</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id5">&#22320;&#28857;&#12487;&#12540;&#12479;</a><ul>
+<li><a class="reference internal" href="#id8">&#22320;&#28857;&#12487;&#12540;&#12479;</a><ul>
 <li><a class="reference internal" href="#get-api-v2-places"><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/api/v2/places</span></code></a></li>
 <li><a class="reference internal" href="#get-api-v2-places-place-id"><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/api/v2/places/{place_id}</span></code></a></li>
 <li><a class="reference internal" href="#get-api-v2-places-geojson"><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/api/v2/places.geojson</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id6">&#26908;&#32034;</a><ul>
-<li><a class="reference internal" href="#get-api-v2-search-q"><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/api/v2/search?q=</span></code></a></li>
+<li><a class="reference internal" href="#id9">&#26908;&#32034;</a><ul>
+<li><a class="reference internal" href="#get-api-v2-search"><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/api/v2/search</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id7">&#22793;&#26356;&#23653;&#27508;</a><ul>
+<li><a class="reference internal" href="#id10">&#22793;&#26356;&#23653;&#27508;</a><ul>
 <li><a class="reference internal" href="#get-api-v2-changes"><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/api/v2/changes</span></code></a></li>
 </ul>
 </li>
@@ -111,10 +122,11 @@ data-aria-dark="オートカラーモードに切り替える">
 <li><a class="reference internal" href="#get-api-v2-rss-entries"><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/api/v2/rss/entries</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id8">&#12504;&#12523;&#12473;&#12481;&#12455;&#12483;&#12463;</a><ul>
+<li><a class="reference internal" href="#id11">&#12504;&#12523;&#12473;&#12481;&#12455;&#12483;&#12463;</a><ul>
 <li><a class="reference internal" href="#get-api-v2-health"><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/api/v2/health</span></code></a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#id12">&#21033;&#29992;&#26178;&#12398;&#27880;&#24847;</a></li>
 </ul>
 </div><a class="js-repo-stats repo-stats flex items-center" href="https://github.com/viasnake/koriyama-open-data-hub"
   data-type="github" data-user="viasnake" data-repo="koriyama-open-data-hub">
@@ -205,14 +217,48 @@ data-aria-dark="オートカラーモードに切り替える">
 </div><article class="yue" role="main">
           <section id="api">
 <h1>API リファレンス<a class="headerlink" href="#api" title="Link to this heading">¶</a></h1>
-<p>すべての公開エンドポイントは読み取り専用です。API リソースは <code class="docutils literal notranslate"><span class="pre">/api/v2</span></code> 配下で提供します。</p>
+<p>Koriyama Open Data Hub API は、郡山市が公開しているオープンデータと公式サイト RSS を読み取り専用で返す非公式 API です。認証は不要です。</p>
+<div class="attention admonition">
+<p class="admonition-title">非公式 API です</p>
+<p>この API は郡山市公式サービスではありません。データの正確性、完全性、最新性、可用性は保証しません。正確な内容は郡山市公式ウェブサイトで確認してください。</p>
+</div>
 <section id="id1">
-<h2>共通レスポンス<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
-<p>JSON エンドポイントは、基本的に <code class="docutils literal notranslate"><span class="pre">meta</span></code> と <code class="docutils literal notranslate"><span class="pre">data</span></code> を持つ形式で返します。</p>
+<h2>エントリポイント<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>URL</p></th>
+<th class="head"><p>挙動</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">https://koriyama-open-data-hub.alflag.org/</span></code></p></td>
+<td><p>ドキュメントへリダイレクトします。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">https://koriyama-open-data-hub.alflag.org/docs/</span></code></p></td>
+<td><p>このドキュメントを表示します。</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">https://koriyama-open-data-hub.alflag.org/api/v2</span></code></p></td>
+<td><p>API のサービス情報を JSON で返します。</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>API のベースパスは <code class="docutils literal notranslate"><span class="pre">/api/v2</span></code> です。このページの例では、ベース URL を <code class="docutils literal notranslate"><span class="pre">https://koriyama-open-data-hub.alflag.org/api/v2</span></code> として記載します。</p>
+</section>
+<section id="id2">
+<h2>共通仕様<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<section id="http">
+<h3>HTTP メソッド<a class="headerlink" href="#http" title="Link to this heading">¶</a></h3>
+<p>公開 API は <code class="docutils literal notranslate"><span class="pre">GET</span></code> のみを使います。CORS は全 origin からの <code class="docutils literal notranslate"><span class="pre">GET</span></code> と <code class="docutils literal notranslate"><span class="pre">OPTIONS</span></code> を許可しています。</p>
+</section>
+<section id="json">
+<h3>JSON レスポンス<a class="headerlink" href="#json" title="Link to this heading">¶</a></h3>
+<p>JSON エンドポイントは、基本的に <code class="docutils literal notranslate"><span class="pre">meta</span></code> と <code class="docutils literal notranslate"><span class="pre">data</span></code> を持つオブジェクトを返します。</p>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
 </span><span data-line="2"><span class="w">  </span><span class="nt">&quot;meta&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 </span><span data-line="3"><span class="w">    </span><span class="nt">&quot;api_version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2.0&quot;</span><span class="p">,</span>
-</span><span data-line="4"><span class="w">    </span><span class="nt">&quot;generated_at&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-06-09T00:00:00.000Z&quot;</span><span class="p">,</span>
+</span><span data-line="4"><span class="w">    </span><span class="nt">&quot;generated_at&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-06-17T00:00:00.000Z&quot;</span><span class="p">,</span>
 </span><span data-line="5"><span class="w">    </span><span class="nt">&quot;source_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;郡山市オープンデータ&quot;</span><span class="p">,</span>
 </span><span data-line="6"><span class="w">    </span><span class="nt">&quot;license&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;CC BY 4.0&quot;</span><span class="p">,</span>
 </span><span data-line="7"><span class="w">    </span><span class="nt">&quot;attribution_required&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
@@ -223,12 +269,43 @@ data-aria-dark="オートカラーモードに切り替える">
 </span><span data-line="12"><span class="p">}</span>
 </span></pre></div>
 </div>
-<p>配列を返すエンドポイントでは <code class="docutils literal notranslate"><span class="pre">meta.result_count</span></code> が付きます。ページング対象の一覧では <code class="docutils literal notranslate"><span class="pre">meta.limit</span></code> と <code class="docutils literal notranslate"><span class="pre">meta.offset</span></code> も返ります。</p>
-<p>存在しないリソースは HTTP ステータスで区別され、<code class="docutils literal notranslate"><span class="pre">data.error</span></code> にエラー名が入ります。</p>
+<p><code class="docutils literal notranslate"><span class="pre">meta.generated_at</span></code> は API がレスポンスを生成した日時です。配列を返すエンドポイントでは <code class="docutils literal notranslate"><span class="pre">meta.result_count</span></code> が付きます。ページング対象の一覧では <code class="docutils literal notranslate"><span class="pre">meta.limit</span></code> と <code class="docutils literal notranslate"><span class="pre">meta.offset</span></code> も返ります。</p>
+</section>
+<section id="geojson">
+<h3>GeoJSON レスポンス<a class="headerlink" href="#geojson" title="Link to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/places.geojson</span></code> は <code class="docutils literal notranslate"><span class="pre">application/geo+json;</span> <span class="pre">charset=utf-8</span></code> の GeoJSON FeatureCollection を返します。このエンドポイントは <code class="docutils literal notranslate"><span class="pre">meta</span></code> / <code class="docutils literal notranslate"><span class="pre">data</span></code> の envelope を使いません。</p>
+</section>
+<section id="id3">
+<h3>ページング<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<p>一覧系エンドポイントでは <code class="docutils literal notranslate"><span class="pre">limit</span></code> と <code class="docutils literal notranslate"><span class="pre">offset</span></code> を指定できます。</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>パラメータ</p></th>
+<th class="head"><p>説明</p></th>
+<th class="head"><p>既定値</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">limit</span></code></p></td>
+<td><p>取得件数です。<code class="docutils literal notranslate"><span class="pre">1</span></code> から <code class="docutils literal notranslate"><span class="pre">1000</span></code> の範囲に丸められます。</p></td>
+<td><p>エンドポイントにより <code class="docutils literal notranslate"><span class="pre">100</span></code> または <code class="docutils literal notranslate"><span class="pre">1000</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">offset</span></code></p></td>
+<td><p>取得開始位置です。負の値は <code class="docutils literal notranslate"><span class="pre">0</span></code> として扱われます。</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id4">
+<h3>エラー<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<p>存在しないリソースは HTTP ステータスと <code class="docutils literal notranslate"><span class="pre">data.error</span></code> で区別します。</p>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="p">{</span>
 </span><span data-line="2"><span class="w">  </span><span class="nt">&quot;meta&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 </span><span data-line="3"><span class="w">    </span><span class="nt">&quot;api_version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2.0&quot;</span><span class="p">,</span>
-</span><span data-line="4"><span class="w">    </span><span class="nt">&quot;generated_at&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-06-09T00:00:00.000Z&quot;</span><span class="p">,</span>
+</span><span data-line="4"><span class="w">    </span><span class="nt">&quot;generated_at&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-06-17T00:00:00.000Z&quot;</span><span class="p">,</span>
 </span><span data-line="5"><span class="w">    </span><span class="nt">&quot;source_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;郡山市オープンデータ&quot;</span><span class="p">,</span>
 </span><span data-line="6"><span class="w">    </span><span class="nt">&quot;license&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;CC BY 4.0&quot;</span><span class="p">,</span>
 </span><span data-line="7"><span class="w">    </span><span class="nt">&quot;attribution_required&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
@@ -241,33 +318,38 @@ data-aria-dark="オートカラーモードに切り替える">
 </span><span data-line="14"><span class="p">}</span>
 </span></pre></div>
 </div>
-</section>
-<section id="id2">
-<h2>ページング<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
-<p>一覧系エンドポイントでは <code class="docutils literal notranslate"><span class="pre">limit</span></code> と <code class="docutils literal notranslate"><span class="pre">offset</span></code> を指定できます。</p>
 <div class="table-wrapper colwidths-auto docutils container">
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>パラメータ</p></th>
-<th class="head"><p>説明</p></th>
-<th class="head"><p>既定値</p></th>
+<tr class="row-odd"><th class="head"><p>HTTP ステータス</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">data.error</span></code></p></th>
+<th class="head"><p>主な原因</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">limit</span></code></p></td>
-<td><p>取得件数。最大 <code class="docutils literal notranslate"><span class="pre">1000</span></code> 件です。</p></td>
-<td><p>エンドポイントにより <code class="docutils literal notranslate"><span class="pre">100</span></code> または <code class="docutils literal notranslate"><span class="pre">1000</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">400</span></code></p></td>
+<td><p>バリデーションエラー</p></td>
+<td><p>必須 query がない、query の形式が合わない</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">offset</span></code></p></td>
-<td><p>取得開始位置です。</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">404</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">dataset_not_found</span></code></p></td>
+<td><p>指定した <code class="docutils literal notranslate"><span class="pre">dataset_id</span></code> が見つからない</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">404</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">place_not_found</span></code></p></td>
+<td><p>指定した <code class="docutils literal notranslate"><span class="pre">place_id</span></code> が見つからない</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">404</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">not_found</span></code></p></td>
+<td><p>パスが存在しない</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 </section>
-<section id="id3">
-<h2>エンドポイント一覧<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+</section>
+<section id="id5">
+<h2>エンドポイント一覧<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
 <div class="table-wrapper colwidths-auto docutils container">
 <table class="docutils align-default">
 <thead>
@@ -278,12 +360,12 @@ data-aria-dark="オートカラーモードに切り替える">
 </thead>
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">/</span></code></p></td>
-<td><p>サービス情報と主要エンドポイント</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/api/v2</span></code></p></td>
+<td><p>API のサービス情報</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">/api/v2/health</span></code></p></td>
-<td><p>データ件数、RSS 取得状況、最近の更新状況</p></td>
+<td><p>データ件数、取得ログ、状態</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">/api/v2/datasets</span></code></p></td>
@@ -291,7 +373,7 @@ data-aria-dark="オートカラーモードに切り替える">
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">/api/v2/datasets/{dataset_id}</span></code></p></td>
-<td><p>データセット詳細と出典情報</p></td>
+<td><p>データセット詳細</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">/api/v2/datasets/{dataset_id}/records</span></code></p></td>
@@ -307,7 +389,7 @@ data-aria-dark="オートカラーモードに切り替える">
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">/api/v2/places.geojson</span></code></p></td>
-<td><p>地点データの GeoJSON FeatureCollection</p></td>
+<td><p>地点データの GeoJSON</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">GET</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">/api/v2/search?q=</span></code></p></td>
@@ -325,39 +407,166 @@ data-aria-dark="オートカラーモードに切り替える">
 </table>
 </div>
 </section>
-<section id="id4">
-<h2>データセット<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<section id="id6">
+<h2>サービス情報<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h2>
+<section id="get-api-v2">
+<h3><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/api/v2</span></code><a class="headerlink" href="#get-api-v2" title="Link to this heading">¶</a></h3>
+<p>API 名、ベースパス、ドキュメント URL、主要エンドポイントを返します。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span>https://koriyama-open-data-hub.alflag.org/api/v2
+</span></pre></div>
+</div>
+<p>主な <code class="docutils literal notranslate"><span class="pre">data</span></code> フィールド:</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>フィールド</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">name</span></code></p></td>
+<td><p>API 名</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">description</span></code></p></td>
+<td><p>API の説明</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">api_endpoint</span></code></p></td>
+<td><p>API ベース URL</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">api_base_path</span></code></p></td>
+<td><p>API ベースパス</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">documentation_url</span></code></p></td>
+<td><p>ドキュメント URL</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">endpoints</span></code></p></td>
+<td><p>主要エンドポイントのパス</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="id7">
+<h2>データセット<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h2>
 <section id="get-api-v2-datasets">
 <h3><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/api/v2/datasets</span></code><a class="headerlink" href="#get-api-v2-datasets" title="Link to this heading">¶</a></h3>
-<p>公開データセットの一覧を返します。</p>
+<p>公開 API で利用できるデータセット一覧を返します。</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span>https://koriyama-open-data-hub.alflag.org/api/v2/datasets
 </span></pre></div>
+</div>
+<p>主な <code class="docutils literal notranslate"><span class="pre">data[]</span></code> フィールド:</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>フィールド</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">id</span></code></p></td>
+<td><p>データセット ID</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">name</span></code></p></td>
+<td><p>データセット名</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">category</span></code></p></td>
+<td><p>API 側のカテゴリ</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">source_page_url</span></code></p></td>
+<td><p>出典ページ URL</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">source_files</span></code></p></td>
+<td><p>出典ファイルの配列</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">format</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">csv_or_xlsx</span></code>、<code class="docutils literal notranslate"><span class="pre">zip</span></code>、<code class="docutils literal notranslate"><span class="pre">mixed</span></code> のいずれか</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">enabled</span></code></p></td>
+<td><p>API で有効かどうか</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">public_api</span></code></p></td>
+<td><p>公開 API の対象かどうか</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">warnings</span></code></p></td>
+<td><p>注意事項</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </section>
 <section id="get-api-v2-datasets-dataset-id">
 <h3><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/api/v2/datasets/{dataset_id}</span></code><a class="headerlink" href="#get-api-v2-datasets-dataset-id" title="Link to this heading">¶</a></h3>
-<p>データセット 1 件の詳細と出典情報を返します。</p>
+<p>データセット 1 件の詳細を返します。</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span>https://koriyama-open-data-hub.alflag.org/api/v2/datasets/aed
 </span></pre></div>
 </div>
+<p>指定した <code class="docutils literal notranslate"><span class="pre">dataset_id</span></code> が見つからない場合は <code class="docutils literal notranslate"><span class="pre">404</span> <span class="pre">dataset_not_found</span></code> を返します。</p>
 </section>
 <section id="get-api-v2-datasets-dataset-id-records">
 <h3><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/api/v2/datasets/{dataset_id}/records</span></code><a class="headerlink" href="#get-api-v2-datasets-dataset-id-records" title="Link to this heading">¶</a></h3>
-<p>データセットの元データ行を返します。<code class="docutils literal notranslate"><span class="pre">raw</span></code> に郡山市の公開ファイルから読み取った行データが入ります。</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span><span class="s2">&quot;https://koriyama-open-data-hub.alflag.org/api/v2/datasets/aed/records?limit=10&quot;</span>
-</span></pre></div>
-</div>
-</section>
-</section>
-<section id="id5">
-<h2>地点データ<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
-<section id="get-api-v2-places">
-<h3><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/api/v2/places</span></code><a class="headerlink" href="#get-api-v2-places" title="Link to this heading">¶</a></h3>
-<p>正規化済みの地点データを返します。</p>
+<p>データセットの元データ行を返します。<code class="docutils literal notranslate"><span class="pre">data[].raw</span></code> には、郡山市の公開ファイルから読み取った行データが入ります。</p>
 <div class="table-wrapper colwidths-auto docutils container">
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>パラメータ</p></th>
+<tr class="row-odd"><th class="head"><p>Query</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">limit</span></code></p></td>
+<td><p>取得件数。既定値は <code class="docutils literal notranslate"><span class="pre">1000</span></code> です。</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">offset</span></code></p></td>
+<td><p>取得開始位置です。</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span><span class="s2">&quot;https://koriyama-open-data-hub.alflag.org/api/v2/datasets/aed/records?limit=10&quot;</span>
+</span></pre></div>
+</div>
+<p>主な <code class="docutils literal notranslate"><span class="pre">data[]</span></code> フィールド:</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>フィールド</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">id</span></code></p></td>
+<td><p>API 内部の元データ行 ID</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">dataset_id</span></code></p></td>
+<td><p>データセット ID</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">source_record_key</span></code></p></td>
+<td><p>元データ側の識別キー。ない場合は <code class="docutils literal notranslate"><span class="pre">null</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">source_row_hash</span></code></p></td>
+<td><p>元データ行のハッシュ</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">raw</span></code></p></td>
+<td><p>元データ行</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">fetched_at</span></code></p></td>
+<td><p>取得日時</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="id8">
+<h2>地点データ<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h2>
+<section id="get-api-v2-places">
+<h3><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/api/v2/places</span></code><a class="headerlink" href="#get-api-v2-places" title="Link to this heading">¶</a></h3>
+<p>正規化済みの地点データを返します。施設、AED、公衆無線 LAN、公衆トイレ、子育て施設、医療機関、学校などを同じ形で取得できます。</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Query</p></th>
 <th class="head"><p>説明</p></th>
 </tr>
 </thead>
@@ -375,7 +584,7 @@ data-aria-dark="オートカラーモードに切り替える">
 <td><p><code class="docutils literal notranslate"><span class="pre">minLng,minLat,maxLng,maxLat</span></code> の矩形範囲で絞り込みます。</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">limit</span></code></p></td>
-<td><p>取得件数です。</p></td>
+<td><p>取得件数。既定値は <code class="docutils literal notranslate"><span class="pre">1000</span></code> です。</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">offset</span></code></p></td>
 <td><p>取得開始位置です。</p></td>
@@ -386,7 +595,7 @@ data-aria-dark="オートカラーモードに切り替える">
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span><span class="s2">&quot;https://koriyama-open-data-hub.alflag.org/api/v2/places?category=facility&amp;limit=20&quot;</span>
 </span></pre></div>
 </div>
-<p>地点データの主なフィールドは次のとおりです。</p>
+<p>地点データの主なフィールド:</p>
 <div class="table-wrapper colwidths-auto docutils container">
 <table class="docutils align-default">
 <thead>
@@ -408,13 +617,13 @@ data-aria-dark="オートカラーモードに切り替える">
 <td><p>API 側のカテゴリ</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">subcategory</span></code></p></td>
-<td><p>データセット ID をもとにした細分類</p></td>
+<td><p>細分類。ない場合は <code class="docutils literal notranslate"><span class="pre">null</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">address</span></code></p></td>
 <td><p>住所</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">lat</span></code>, <code class="docutils literal notranslate"><span class="pre">lng</span></code></p></td>
-<td><p>緯度・経度</p></td>
+<td><p>緯度・経度。未取得または不正な場合は <code class="docutils literal notranslate"><span class="pre">null</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">phone</span></code>, <code class="docutils literal notranslate"><span class="pre">fax</span></code>, <code class="docutils literal notranslate"><span class="pre">email</span></code></p></td>
 <td><p>連絡先</p></td>
@@ -428,6 +637,12 @@ data-aria-dark="オートカラーモードに切り替える">
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">attributes</span></code></p></td>
 <td><p>元データや正規化時の警告</p></td>
 </tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">first_seen_at</span></code>, <code class="docutils literal notranslate"><span class="pre">last_seen_at</span></code></p></td>
+<td><p>API 側で確認した日時</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">deleted_at</span></code></p></td>
+<td><p>削除済みの場合の日時。通常は <code class="docutils literal notranslate"><span class="pre">null</span></code></p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -438,25 +653,26 @@ data-aria-dark="オートカラーモードに切り替える">
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span>https://koriyama-open-data-hub.alflag.org/api/v2/places/place_aed_example
 </span></pre></div>
 </div>
+<p>指定した <code class="docutils literal notranslate"><span class="pre">place_id</span></code> が見つからない場合は <code class="docutils literal notranslate"><span class="pre">404</span> <span class="pre">place_not_found</span></code> を返します。</p>
 </section>
 <section id="get-api-v2-places-geojson">
 <h3><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/api/v2/places.geojson</span></code><a class="headerlink" href="#get-api-v2-places-geojson" title="Link to this heading">¶</a></h3>
-<p>地点データを <code class="docutils literal notranslate"><span class="pre">application/geo+json;</span> <span class="pre">charset=utf-8</span></code> の GeoJSON FeatureCollection で返します。<code class="docutils literal notranslate"><span class="pre">/api/v2/places</span></code> と同じ絞り込みパラメータを利用できます。</p>
+<p>地点データを GeoJSON FeatureCollection で返します。<code class="docutils literal notranslate"><span class="pre">/api/v2/places</span></code> と同じ絞り込み query を使えます。</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span><span class="s2">&quot;https://koriyama-open-data-hub.alflag.org/api/v2/places.geojson?dataset_id=public_wifi&quot;</span>
 </span></pre></div>
 </div>
-<p>GeoJSON の <code class="docutils literal notranslate"><span class="pre">geometry.coordinates</span></code> は <code class="docutils literal notranslate"><span class="pre">[経度,</span> <span class="pre">緯度]</span></code> です。緯度・経度がない地点は GeoJSON には含まれません。</p>
+<p><code class="docutils literal notranslate"><span class="pre">geometry.coordinates</span></code> は <code class="docutils literal notranslate"><span class="pre">[経度,</span> <span class="pre">緯度]</span></code> です。緯度・経度がない地点は GeoJSON には含まれません。</p>
 </section>
 </section>
-<section id="id6">
-<h2>検索<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h2>
-<section id="get-api-v2-search-q">
-<h3><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/api/v2/search?q=</span></code><a class="headerlink" href="#get-api-v2-search-q" title="Link to this heading">¶</a></h3>
+<section id="id9">
+<h2>検索<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h2>
+<section id="get-api-v2-search">
+<h3><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/api/v2/search</span></code><a class="headerlink" href="#get-api-v2-search" title="Link to this heading">¶</a></h3>
 <p>地点データを名称または住所で検索します。<code class="docutils literal notranslate"><span class="pre">q</span></code> は必須です。</p>
 <div class="table-wrapper colwidths-auto docutils container">
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>パラメータ</p></th>
+<tr class="row-odd"><th class="head"><p>Query</p></th>
 <th class="head"><p>説明</p></th>
 </tr>
 </thead>
@@ -465,7 +681,7 @@ data-aria-dark="オートカラーモードに切り替える">
 <td><p>検索キーワード</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">limit</span></code></p></td>
-<td><p>取得件数。最大 <code class="docutils literal notranslate"><span class="pre">1000</span></code> 件です。</p></td>
+<td><p>取得件数。既定値は <code class="docutils literal notranslate"><span class="pre">100</span></code> です。</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">offset</span></code></p></td>
 <td><p>取得開始位置です。</p></td>
@@ -476,18 +692,18 @@ data-aria-dark="オートカラーモードに切り替える">
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span><span class="s2">&quot;https://koriyama-open-data-hub.alflag.org/api/v2/search?q=図書館&amp;limit=10&quot;</span>
 </span></pre></div>
 </div>
-<p>レスポンスの <code class="docutils literal notranslate"><span class="pre">data.places</span></code> に地点配列、<code class="docutils literal notranslate"><span class="pre">data.count</span></code> に返却件数が入ります。</p>
+<p>レスポンスの <code class="docutils literal notranslate"><span class="pre">data.places</span></code> に地点データの配列、<code class="docutils literal notranslate"><span class="pre">data.count</span></code> に返却件数が入ります。</p>
 </section>
 </section>
-<section id="id7">
-<h2>変更履歴<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h2>
+<section id="id10">
+<h2>変更履歴<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h2>
 <section id="get-api-v2-changes">
 <h3><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/api/v2/changes</span></code><a class="headerlink" href="#get-api-v2-changes" title="Link to this heading">¶</a></h3>
 <p>取得・正規化時に検出した変更履歴を返します。</p>
 <div class="table-wrapper colwidths-auto docutils container">
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>パラメータ</p></th>
+<tr class="row-odd"><th class="head"><p>Query</p></th>
 <th class="head"><p>説明</p></th>
 </tr>
 </thead>
@@ -496,7 +712,7 @@ data-aria-dark="オートカラーモードに切り替える">
 <td><p>指定日時以降の変更だけを返します。ISO 8601 形式の文字列を指定できます。</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">limit</span></code></p></td>
-<td><p>取得件数です。</p></td>
+<td><p>取得件数。既定値は <code class="docutils literal notranslate"><span class="pre">100</span></code> です。</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">offset</span></code></p></td>
 <td><p>取得開始位置です。</p></td>
@@ -507,7 +723,39 @@ data-aria-dark="オートカラーモードに切り替える">
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span><span class="s2">&quot;https://koriyama-open-data-hub.alflag.org/api/v2/changes?since=2026-06-01T00:00:00.000Z&quot;</span>
 </span></pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">change_type</span></code> には <code class="docutils literal notranslate"><span class="pre">raw_created</span></code>、<code class="docutils literal notranslate"><span class="pre">raw_updated</span></code>、<code class="docutils literal notranslate"><span class="pre">place_created</span></code>、<code class="docutils literal notranslate"><span class="pre">place_updated</span></code> などが入ります。</p>
+<p>主な <code class="docutils literal notranslate"><span class="pre">data[]</span></code> フィールド:</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>フィールド</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">id</span></code></p></td>
+<td><p>変更 ID</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">dataset_id</span></code></p></td>
+<td><p>データセット ID</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">record_id</span></code></p></td>
+<td><p>対象レコード ID</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">change_type</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">raw_created</span></code>、<code class="docutils literal notranslate"><span class="pre">raw_updated</span></code>、<code class="docutils literal notranslate"><span class="pre">place_created</span></code>、<code class="docutils literal notranslate"><span class="pre">place_updated</span></code> など</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">changed_at</span></code></p></td>
+<td><p>変更検出日時</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">before</span></code></p></td>
+<td><p>変更前の値。ない場合は <code class="docutils literal notranslate"><span class="pre">null</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">after</span></code></p></td>
+<td><p>変更後の値。ない場合は <code class="docutils literal notranslate"><span class="pre">null</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </section>
 </section>
 <section id="rss">
@@ -518,7 +766,7 @@ data-aria-dark="オートカラーモードに切り替える">
 <div class="table-wrapper colwidths-auto docutils container">
 <table class="docutils align-default">
 <thead>
-<tr class="row-odd"><th class="head"><p>パラメータ</p></th>
+<tr class="row-odd"><th class="head"><p>Query</p></th>
 <th class="head"><p>説明</p></th>
 </tr>
 </thead>
@@ -527,7 +775,7 @@ data-aria-dark="オートカラーモードに切り替える">
 <td><p>API 側で分類した RSS カテゴリで絞り込みます。</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">limit</span></code></p></td>
-<td><p>取得件数です。</p></td>
+<td><p>取得件数。既定値は <code class="docutils literal notranslate"><span class="pre">100</span></code> です。</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">offset</span></code></p></td>
 <td><p>取得開始位置です。</p></td>
@@ -538,18 +786,106 @@ data-aria-dark="オートカラーモードに切り替える">
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span><span class="s2">&quot;https://koriyama-open-data-hub.alflag.org/api/v2/rss/entries?category=disaster&amp;limit=10&quot;</span>
 </span></pre></div>
 </div>
+<p>主な <code class="docutils literal notranslate"><span class="pre">data[]</span></code> フィールド:</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>フィールド</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">id</span></code></p></td>
+<td><p>RSS 記事 ID</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">feed_id</span></code></p></td>
+<td><p>フィード ID</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">title</span></code></p></td>
+<td><p>記事タイトル</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">link</span></code></p></td>
+<td><p>記事 URL</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">published_at</span></code></p></td>
+<td><p>公開日時。RSS にない場合は <code class="docutils literal notranslate"><span class="pre">null</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">fetched_at</span></code></p></td>
+<td><p>取得日時</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">category</span></code></p></td>
+<td><p>API 側のカテゴリ</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tags</span></code></p></td>
+<td><p>分類タグ</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">source_hash</span></code></p></td>
+<td><p>元記事情報のハッシュ</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 <p>RSS カテゴリは <code class="docutils literal notranslate"><span class="pre">disaster</span></code>、<code class="docutils literal notranslate"><span class="pre">childcare</span></code>、<code class="docutils literal notranslate"><span class="pre">life</span></code>、<code class="docutils literal notranslate"><span class="pre">business</span></code>、<code class="docutils literal notranslate"><span class="pre">event</span></code>、<code class="docutils literal notranslate"><span class="pre">city_admin</span></code> です。</p>
 </section>
 </section>
-<section id="id8">
-<h2>ヘルスチェック<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h2>
+<section id="id11">
+<h2>ヘルスチェック<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h2>
 <section id="get-api-v2-health">
 <h3><code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/api/v2/health</span></code><a class="headerlink" href="#get-api-v2-health" title="Link to this heading">¶</a></h3>
 <p>データ件数、RSS の取得状況、直近の取得ログを返します。データベースが空の場合や直近取得に失敗がある場合は、<code class="docutils literal notranslate"><span class="pre">data.status</span></code> が <code class="docutils literal notranslate"><span class="pre">degraded</span></code> になります。</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span data-line="1">curl<span class="w"> </span>https://koriyama-open-data-hub.alflag.org/api/v2/health
 </span></pre></div>
 </div>
+<p>主な <code class="docutils literal notranslate"><span class="pre">data</span></code> フィールド:</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>フィールド</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">status</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ok</span></code> または <code class="docutils literal notranslate"><span class="pre">degraded</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">datasets.total</span></code></p></td>
+<td><p>データセット数</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">datasets.enabled</span></code></p></td>
+<td><p>有効なデータセット数</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">datasets.raw_records_count</span></code></p></td>
+<td><p>元データ行数</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">datasets.places_count</span></code></p></td>
+<td><p>地点データ数</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">datasets.record_changes_count</span></code></p></td>
+<td><p>変更履歴数</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">datasets.recent_fetches</span></code></p></td>
+<td><p>直近のオープンデータ取得ログ</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">datasets.failed</span></code></p></td>
+<td><p>直近の失敗ログ</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rss.entries_count</span></code></p></td>
+<td><p>RSS 記事数</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">rss.recent_fetches</span></code></p></td>
+<td><p>直近の RSS 取得ログ</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rss.failed</span></code></p></td>
+<td><p>直近の RSS 取得失敗ログ</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </section>
+</section>
+<section id="id12">
+<h2>利用時の注意<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h2>
+<p>出典表示が必要です。利用するデータの出典とライセンスは、データセット詳細や <a class="reference internal" href="attribution.html"><span class="doc">出典・ライセンス・注意事項</span></a> を確認してください。</p>
 </section>
 </section>
 
