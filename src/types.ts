@@ -1,4 +1,5 @@
 export type Bindings = {
+  API_RATE_LIMITER: RateLimit;
   DB: D1Database;
 };
 

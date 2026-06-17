@@ -8,6 +8,14 @@ directory = "./public"
 [observability]
 enabled = true
 
+[[ratelimits]]
+name = "API_RATE_LIMITER"
+namespace_id = "2026061701"
+
+  [ratelimits.simple]
+  limit = 30
+  period = 60
+
 [triggers]
 crons = [
   "0 * * * *"

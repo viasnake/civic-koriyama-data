@@ -4,6 +4,7 @@ import { CORS_HEADERS, jsonResponse, PUBLIC_API_BASE_URL, PUBLIC_API_ENDPOINT } 
 import { changeRoutes } from "./routes/changes";
 import { datasetRoutes } from "./routes/datasets";
 import { healthRoutes } from "./routes/health";
+import { apiRateLimit } from "./middleware/rateLimit";
 import { placeRoutes, placesGeoJsonResponse } from "./routes/places";
 import { rssRoutes } from "./routes/rss";
 import { searchRoutes } from "./routes/search";
@@ -52,6 +53,7 @@ app.get("/", (c) => c.redirect("/docs/"));
 app.get("/docs", (c) => c.redirect("/docs/"));
 
 const api = new Hono<{ Bindings: Bindings }>();
+api.use("*", apiRateLimit);
 api.get("/", () => jsonResponse(serviceInfo()));
 api.route("/health", healthRoutes);
 api.route("/datasets", datasetRoutes);
