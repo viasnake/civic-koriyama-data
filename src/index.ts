@@ -33,7 +33,9 @@ app.get("/", () =>
       "Unofficial API for Koriyama City open data, RSS entries, places, and GeoJSON.",
     api_endpoint: PUBLIC_API_ENDPOINT,
     api_base_path: "/api/v2",
+    documentation_url: new URL("docs/", PUBLIC_API_ENDPOINT).toString(),
     endpoints: [
+      "/docs/",
       "/api/v2/health",
       "/api/v2/datasets",
       "/api/v2/places",
@@ -44,6 +46,8 @@ app.get("/", () =>
     ],
   }),
 );
+
+app.get("/docs", (c) => c.redirect("/docs/"));
 
 const api = new Hono<{ Bindings: Bindings }>();
 api.route("/health", healthRoutes);
