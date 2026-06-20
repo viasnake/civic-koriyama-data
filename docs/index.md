@@ -58,6 +58,7 @@ curl "https://civic-koriyama-data.alflag.org/api/v2/places.geojson?category=faci
 - 地点データの GeoJSON
 - 取得・正規化時に検出した変更履歴
 - 郡山市公式サイト RSS の記事情報
+- データ更新状態と取得ログ
 
 ## ドキュメント
 
@@ -67,5 +68,6 @@ curl "https://civic-koriyama-data.alflag.org/api/v2/places.geojson?category=faci
 API リファレンス <api>
 データセット API <datasets>
 RSS API <rss>
+運用・状態確認 <operations>
 出典・ライセンス <attribution>
 ```
