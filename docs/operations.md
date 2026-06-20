@@ -36,8 +36,6 @@ curl https://civic-koriyama-data.alflag.org/api/v2/health
 | `rss.recent_fetches` | 直近の RSS 取得ログ |
 | `rss.failed` | 直近の RSS 取得失敗ログ |
 
-取得ログの `error_message` は API レスポンスには含めません。内部エラーの詳細は公開しません。
-
 `status = degraded` は、直近の取得失敗やデータ未投入など、利用前に確認した方がよい状態を示します。すでに取得済みのデータが返る場合でも、最新の公式情報とは差が出ている可能性があります。
 
 ## RSS feed 確認レポート
