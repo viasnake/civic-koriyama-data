@@ -9,7 +9,7 @@
     "docs:install": "python -m pip install -r docs/requirements.txt",
     "docs:build": "rm -rf public .tmp/sphinx-doctrees && python -m sphinx -b html -d .tmp/sphinx-doctrees -W --keep-going docs public/docs",
     "docs:prepare": "npm run docs:install && npm run docs:build",
-    "deploy:production": "npm run docs:prepare && npx --yes wrangler d1 migrations apply DB --remote && npx --yes wrangler deploy",
+    "deploy:production": "node scripts/deploy-production.mjs",
     "deploy:preview": "npm run docs:prepare && npx --yes wrangler versions upload",
     "check": "npm run typecheck && npm test && npm run audit:high",
     "typecheck": "tsc --noEmit",
