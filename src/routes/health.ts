@@ -5,9 +5,7 @@ import type { Bindings, FetchLog } from "../types";
 
 export const healthRoutes = new Hono<{ Bindings: Bindings }>();
 
-type PublicFetchLog = Omit<FetchLog, "error_message"> & {
-  error_message: string | null;
-};
+type PublicFetchLog = Omit<FetchLog, "error_message">;
 
 healthRoutes.get("/", async (c) => {
   const datasetSummary = await c.env.DB.prepare(
@@ -72,7 +70,11 @@ export function hasCurrentFetchError(logs: readonly Pick<FetchLog, "fetched_at" 
 
 export function toPublicFetchLog(log: FetchLog): PublicFetchLog {
   return {
-    ...log,
-    error_message: log.error_message ? "details_redacted" : null,
+    id: log.id,
+    source_type: log.source_type,
+    source_id: log.source_id,
+    status: log.status,
+    fetched_at: log.fetched_at,
+    records_count: log.records_count,
   };
 }
