@@ -73,7 +73,7 @@ curl "https://civic-koriyama-data.alflag.org/api/v2/rss/entries?kind=life&since=
 | `link` | 記事 URL |
 | `canonical_url` | 重複排除に使う正規化 URL。取得できない場合は `null` |
 | `published_at` | 公開日時。RSS にない場合は `null` |
-| `fetched_at` | API が記事を取得した日時 |
+| `fetched_at` | 記事の内容が変更されたと判定され、最後に保存された日時 |
 | `category` | API 側で分類したカテゴリ |
 | `tags` | 分類タグ |
 

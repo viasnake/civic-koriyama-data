@@ -27,7 +27,6 @@ export async function ingestRss(db: D1Database, options: IngestRssOptions = {}):
   const fetchedAt = options.now ?? nowIso();
   const scheduledAt = options.scheduledAt ?? new Date(fetchedAt);
   try {
-    await syncSeedRssFeeds(db, fetchedAt);
     let feeds = await listRssFeeds(db);
 
     if (feeds.length === 0) {

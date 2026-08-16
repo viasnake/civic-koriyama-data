@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
-import { getLatestRssAuditReport, listRssEntries, listRssFeeds, syncSeedRssFeeds } from "../db/queries";
+import { getLatestRssAuditReport, listRssEntries, listRssFeeds } from "../db/queries";
 import { jsonResponse } from "../constants";
 import type { Bindings, RssEntry, RssEntryResponse, RssFeed, RssFeedKind, RssFeedResponse } from "../types";
 import { parseJsonArray } from "../utils/json";
@@ -23,7 +23,6 @@ rssRoutes.get(
   ),
   async (c) => {
     const query = c.req.valid("query");
-    await syncSeedRssFeeds(c.env.DB);
     const feeds = await listRssFeeds(c.env.DB, {
       includeDisabled: isTrue(query.include_disabled),
       includeUnverified: isTrue(query.include_unverified),
