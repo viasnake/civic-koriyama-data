@@ -10,6 +10,7 @@ import type { DatasetCatalogItem, FetchLog, Place, RawRecord, RssEntry, RssFeed,
 
 const RSS_SEED_SYNC_CHUNK_SIZE = 8;
 const RSS_ENTRY_IDENTITY_LOOKUP_CHUNK_SIZE = 50;
+const RSS_ENTRY_FEED_TOUCH_INTERVAL_MS = 24 * 60 * 60 * 1000; // last_seen_at is a daily heartbeat, not an event log.
 
 type DatasetRow = Omit<DatasetCatalogItem, "enabled" | "public_api" | "source_type" | "format" | "normalize_as"> & {
   source_page: string;
@@ -282,7 +283,13 @@ export async function syncSeedRssFeeds(db: D1Database, now = new Date().toISOStr
           kind = excluded.kind,
           source = 'seed',
           last_seen_at = excluded.last_seen_at,
-          updated_at = excluded.updated_at`,
+          updated_at = excluded.updated_at
+        where rss_feeds.name is not excluded.name
+          or rss_feeds.title is not excluded.title
+          or rss_feeds.url is not excluded.url
+          or rss_feeds.path is not excluded.path
+          or rss_feeds.kind is not excluded.kind
+          or rss_feeds.source is not 'seed'`,
       )
       .bind(...bindings)
       .run();
@@ -421,15 +428,19 @@ export type RssEntryUpsert = {
   canonicalUrl: string | null;
 };
 
-type RssEntryIdentityRow = {
+export type RssEntryIdentityRow = {
   id: string;
   source_hash: string;
   canonical_url: string | null;
+  category: string | null;
+  tags_json: string;
 };
 
 export async function upsertRssEntries(db: D1Database, entries: RssEntryUpsert[]): Promise<void> {
   if (entries.length === 0) return;
-  const resolvedEntries = resolveRssEntryUpsertIds(entries, await findExistingRssEntryIdentities(db, entries));
+  const existingRows = await findExistingRssEntryIdentities(db, entries);
+  const resolvedEntries = resolveRssEntryUpsertIds(entries, existingRows);
+  const writePlan = planRssEntryWrites(resolvedEntries, existingRows);
 
   const entryStatement = db.prepare(
     `insert into rss_entries (
@@ -453,7 +464,11 @@ export async function upsertRssEntries(db: D1Database, entries: RssEntryUpsert[]
       category = excluded.category,
       tags_json = excluded.tags_json,
       source_hash = excluded.source_hash,
-      canonical_url = excluded.canonical_url`,
+      canonical_url = excluded.canonical_url
+    where rss_entries.source_hash is not excluded.source_hash
+      or rss_entries.category is not excluded.category
+      or rss_entries.tags_json is not excluded.tags_json
+      or rss_entries.canonical_url is not excluded.canonical_url`,
   );
   const entryFeedStatement = db.prepare(
     `insert into rss_entry_feeds (
@@ -463,26 +478,70 @@ export async function upsertRssEntries(db: D1Database, entries: RssEntryUpsert[]
       last_seen_at
     ) values (?, ?, ?, ?)
     on conflict(entry_id, feed_id) do update set
-      last_seen_at = excluded.last_seen_at`,
+      last_seen_at = excluded.last_seen_at
+    where rss_entry_feeds.last_seen_at < ?`,
   );
 
   await runStatementBatches(
     db,
-    resolvedEntries.flatMap((entry) => [
-      entryStatement.bind(
-        entry.id,
-        entry.feedId,
-        entry.title,
-        entry.link,
-        entry.publishedAt,
-        entry.fetchedAt,
-        entry.category,
-        JSON.stringify(entry.tags),
-        entry.sourceHash,
-        entry.canonicalUrl,
+    [
+      ...writePlan.entries.map((entry) =>
+        entryStatement.bind(
+          entry.id,
+          entry.feedId,
+          entry.title,
+          entry.link,
+          entry.publishedAt,
+          entry.fetchedAt,
+          entry.category,
+          JSON.stringify(entry.tags),
+          entry.sourceHash,
+          entry.canonicalUrl,
+        ),
       ),
-      entryFeedStatement.bind(entry.id, entry.feedId, entry.fetchedAt, entry.fetchedAt),
-    ]),
+      ...writePlan.relations.map((entry) => {
+        const touchCutoff = new Date(Date.parse(entry.fetchedAt) - RSS_ENTRY_FEED_TOUCH_INTERVAL_MS).toISOString();
+        return entryFeedStatement.bind(entry.id, entry.feedId, entry.fetchedAt, entry.fetchedAt, touchCutoff);
+      }),
+    ],
+  );
+}
+
+export type RssEntryWritePlan = {
+  entries: RssEntryUpsert[];
+  relations: RssEntryUpsert[];
+};
+
+export function planRssEntryWrites(entries: RssEntryUpsert[], existingRows: RssEntryIdentityRow[]): RssEntryWritePlan {
+  const existingById = new Map(existingRows.map((row) => [row.id, row]));
+  const entriesById = new Map<string, RssEntryUpsert>();
+  const relationsByKey = new Map<string, RssEntryUpsert>();
+
+  for (const entry of entries) {
+    const existing = existingById.get(entry.id);
+    const current = entriesById.get(entry.id);
+
+    if (!current || (!needsRssEntryWrite(current, existing) && needsRssEntryWrite(entry, existing))) {
+      entriesById.set(entry.id, entry);
+    }
+
+    relationsByKey.set(`${entry.id}\u0000${entry.feedId}`, entry);
+  }
+
+  return {
+    entries: [...entriesById.values()].filter((entry) => needsRssEntryWrite(entry, existingById.get(entry.id))),
+    relations: [...relationsByKey.values()],
+  };
+}
+
+function needsRssEntryWrite(entry: RssEntryUpsert, existing: RssEntryIdentityRow | undefined): boolean {
+  if (!existing) return true;
+  // sourceHash already covers title, link, and publishedAt; compare derived fields separately.
+  return (
+    existing.source_hash !== entry.sourceHash ||
+    existing.category !== entry.category ||
+    existing.tags_json !== JSON.stringify(entry.tags) ||
+    existing.canonical_url !== entry.canonicalUrl
   );
 }
 
@@ -534,7 +593,9 @@ async function selectRssEntryIdentities(
   if (values.length === 0) return [];
   const placeholders = values.map(() => "?").join(", ");
   const result = await db
-    .prepare(`select id, source_hash, canonical_url from rss_entries where ${column} in (${placeholders})`)
+    .prepare(
+      `select id, source_hash, canonical_url, category, tags_json from rss_entries where ${column} in (${placeholders})`,
+    )
     .bind(...values)
     .all<RssEntryIdentityRow>();
   return result.results;
