@@ -188,7 +188,9 @@ curl "https://civic-koriyama-data.alflag.org/api/v2/datasets/aed/records?limit=1
 | `source_record_key` | 元データ側の識別キー。ない場合は `null` |
 | `source_row_hash` | 元データ行のハッシュ |
 | `raw` | 元データ行 |
-| `fetched_at` | 取得日時 |
+| `fetched_at` | 現在返している元データ行の内容を最後に保存した日時 |
+
+元データの内容が変わらない取得では `fetched_at` は更新されません。データセット全体の直近取得日時は `/api/v2/health` の `data.datasets.last_success_at` と `data.datasets.recent_fetches` で確認してください。
 
 ## 地点データ
 
@@ -224,8 +226,11 @@ curl "https://civic-koriyama-data.alflag.org/api/v2/places?category=facility&lim
 | `official_url` | 公式 URL |
 | `source_url` | 元ファイル URL |
 | `attributes` | 元データや正規化時の警告 |
-| `first_seen_at`, `last_seen_at` | API 側で確認した日時 |
+| `first_seen_at` | API がこの地点を最初に保存した日時 |
+| `last_seen_at` | 現在返している地点内容を最後に変更・保存した日時 |
 | `deleted_at` | 削除済みの場合の日時。通常は `null` |
+
+地点内容が変わらない取得では `last_seen_at` は更新されません。取得元全体の鮮度は `/api/v2/health` の取得成功日時と取得ログで確認してください。
 
 ### `GET /api/v2/places/{place_id}`
 
@@ -372,7 +377,7 @@ RSS カテゴリは `disaster`、`childcare`、`life`、`business`、`event`、`
 
 ### `GET /api/v2/health`
 
-データ件数、RSS の取得状況、直近の取得ログを返します。データベースが空の場合や直近取得に失敗がある場合は、`data.status` が `degraded` になります。
+データ件数、取得元全体の直近成功日時、RSS の取得状況、直近の取得ログを返します。データベースが空の場合や直近取得に失敗がある場合は、`data.status` が `degraded` になります。個別レコードの保存日時ではなく、この endpoint で取得元の鮮度を判断してください。
 
 ```bash
 curl https://civic-koriyama-data.alflag.org/api/v2/health
