@@ -6,11 +6,21 @@ import {
   type RssDiscoveryReport,
   verificationStatusFromResult,
 } from "../sources/rss";
-import type { DatasetCatalogItem, FetchLog, Place, RawRecord, RssEntry, RssFeed, RssFeedKind } from "../types";
+import type {
+  DatasetCatalogItem,
+  FetchLog,
+  Place,
+  RawRecord,
+  RssEntry,
+  RssFeed,
+  RssFeedKind,
+  RssFeedSource,
+  RssVerificationStatus,
+} from "../types";
 
 const RSS_SEED_SYNC_CHUNK_SIZE = 8;
 const RSS_ENTRY_IDENTITY_LOOKUP_CHUNK_SIZE = 50;
-const RSS_ENTRY_FEED_TOUCH_INTERVAL_MS = 24 * 60 * 60 * 1000; // last_seen_at is a daily heartbeat, not an event log.
+const RSS_ROW_LOOKUP_CHUNK_SIZE = 50; // Stay below D1's 100 bound parameters per query.
 
 type DatasetRow = Omit<DatasetCatalogItem, "enabled" | "public_api" | "source_type" | "format" | "normalize_as"> & {
   source_page: string;
@@ -342,7 +352,13 @@ export async function listRssFeeds(db: D1Database, filters: RssFeedFilters = {})
 }
 
 export async function updateRssFeedVerifications(db: D1Database, verifications: FeedVerification[]): Promise<void> {
-  const statement = db.prepare(
+  if (verifications.length === 0) return;
+  const existingRows = await findRssFeedVerificationStates(
+    db,
+    verifications.map((verification) => verification.seed.id),
+  );
+  const plan = planRssFeedVerificationWrites(verifications, existingRows);
+  const statusStatement = db.prepare(
     `update rss_feeds
     set
       enabled = ?,
@@ -353,25 +369,110 @@ export async function updateRssFeedVerifications(db: D1Database, verifications: 
       updated_at = ?
     where id = ?`,
   );
-
-  await db.batch(
-    verifications.map((verification) => {
-      const status = verificationStatusFromResult(verification.result);
-      return statement.bind(
-        status === "ok" ? 1 : 0,
-        verification.verified_at,
-        status,
-        verification.result.httpStatus,
-        verification.result.status === "ok" ? null : verification.result.error,
-        verification.verified_at,
-        verification.seed.id,
-      );
-    }),
+  const observationStatement = db.prepare(
+    `update rss_feeds
+    set
+      verified_at = ?,
+      http_status = ?,
+      last_error = ?,
+      updated_at = ?
+    where id = ?`,
   );
+
+  await runStatementBatches(
+    db,
+    [
+      ...plan.statusChanges.map((write) =>
+        statusStatement.bind(
+          write.enabled,
+          write.verification.verified_at,
+          write.status,
+          write.verification.result.httpStatus,
+          write.verification.result.status === "ok" ? null : write.verification.result.error,
+          write.verification.verified_at,
+          write.verification.seed.id,
+        ),
+      ),
+      ...plan.observations.map((write) =>
+        observationStatement.bind(
+          write.verification.verified_at,
+          write.verification.result.httpStatus,
+          write.verification.result.status === "ok" ? null : write.verification.result.error,
+          write.verification.verified_at,
+          write.verification.seed.id,
+        ),
+      ),
+    ],
+  );
+}
+
+export type RssFeedVerificationState = {
+  id: string;
+  enabled: number;
+  verification_status: RssVerificationStatus;
+};
+
+type RssFeedVerificationWrite = {
+  verification: FeedVerification;
+  enabled: number;
+  status: RssVerificationStatus;
+};
+
+export type RssFeedVerificationWritePlan = {
+  statusChanges: RssFeedVerificationWrite[];
+  observations: RssFeedVerificationWrite[];
+};
+
+export function planRssFeedVerificationWrites(
+  verifications: readonly FeedVerification[],
+  existingRows: readonly RssFeedVerificationState[],
+): RssFeedVerificationWritePlan {
+  const existingById = new Map(existingRows.map((row) => [row.id, row]));
+  const statusChanges: RssFeedVerificationWrite[] = [];
+  const observations: RssFeedVerificationWrite[] = [];
+
+  for (const verification of verifications) {
+    const status = verificationStatusFromResult(verification.result);
+    const enabled = status === "ok" ? 1 : 0;
+    const write = { verification, enabled, status };
+    const existing = existingById.get(verification.seed.id);
+
+    if (!existing || existing.enabled !== enabled || existing.verification_status !== status) {
+      statusChanges.push(write);
+    } else {
+      observations.push(write);
+    }
+  }
+
+  return { statusChanges, observations };
+}
+
+async function findRssFeedVerificationStates(
+  db: D1Database,
+  ids: readonly string[],
+): Promise<RssFeedVerificationState[]> {
+  const rows: RssFeedVerificationState[] = [];
+
+  for (const chunk of chunks(unique(ids), RSS_ROW_LOOKUP_CHUNK_SIZE)) {
+    const placeholders = chunk.map(() => "?").join(", ");
+    const result = await db
+      .prepare(`select id, enabled, verification_status from rss_feeds where id in (${placeholders})`)
+      .bind(...chunk)
+      .all<RssFeedVerificationState>();
+    rows.push(...result.results);
+  }
+
+  return rows;
 }
 
 export async function upsertDiscoveredRssFeeds(db: D1Database, feeds: DiscoveredFeed[]): Promise<void> {
   if (feeds.length === 0) return;
+  const existingRows = await findDiscoveredRssFeedStates(
+    db,
+    feeds.map((feed) => feed.id),
+  );
+  const writes = planDiscoveredRssFeedWrites(feeds, existingRows);
+  if (writes.length === 0) return;
 
   const statement = db.prepare(
     `insert into rss_feeds (
@@ -391,13 +492,29 @@ export async function upsertDiscoveredRssFeeds(db: D1Database, feeds: Discovered
       updated_at
     ) values (?, ?, ?, ?, ?, ?, 'discovered', 0, 'unchecked', ?, ?, ?, ?, ?)
     on conflict(id) do update set
-      last_seen_at = excluded.last_seen_at,
+      name = case when rss_feeds.source = 'discovered' then excluded.name else rss_feeds.name end,
+      title = case when rss_feeds.source = 'discovered' then excluded.title else rss_feeds.title end,
+      url = case when rss_feeds.source = 'discovered' then excluded.url else rss_feeds.url end,
+      path = case when rss_feeds.source = 'discovered' then excluded.path else rss_feeds.path end,
+      kind = case when rss_feeds.source = 'discovered' then excluded.kind else rss_feeds.kind end,
       discovered_from_url = coalesce(rss_feeds.discovered_from_url, excluded.discovered_from_url),
-      updated_at = excluded.updated_at`,
+      updated_at = excluded.updated_at
+    where (
+        rss_feeds.source = 'discovered'
+        and (
+          rss_feeds.name is not excluded.name
+          or rss_feeds.title is not excluded.title
+          or rss_feeds.url is not excluded.url
+          or rss_feeds.path is not excluded.path
+          or rss_feeds.kind is not excluded.kind
+        )
+      )
+      or (rss_feeds.discovered_from_url is null and excluded.discovered_from_url is not null)`,
   );
 
-  await db.batch(
-    feeds.map((feed) =>
+  await runStatementBatches(
+    db,
+    writes.map((feed) =>
       statement.bind(
         feed.id,
         feed.title,
@@ -413,6 +530,65 @@ export async function upsertDiscoveredRssFeeds(db: D1Database, feeds: Discovered
       ),
     ),
   );
+}
+
+export type DiscoveredRssFeedState = {
+  id: string;
+  name: string;
+  title: string | null;
+  url: string;
+  path: string;
+  kind: RssFeedKind;
+  source: RssFeedSource;
+  discovered_from_url: string | null;
+};
+
+export function planDiscoveredRssFeedWrites(
+  feeds: readonly DiscoveredFeed[],
+  existingRows: readonly DiscoveredRssFeedState[],
+): DiscoveredFeed[] {
+  const existingById = new Map(existingRows.map((row) => [row.id, row]));
+  const writes = new Map<string, DiscoveredFeed>();
+
+  for (const feed of feeds) {
+    const existing = existingById.get(feed.id);
+    const needsDiscoverySource = existing !== undefined && existing.discovered_from_url === null;
+    const discoveredFieldsChanged =
+      existing?.source === "discovered" &&
+      (existing.name !== feed.title ||
+        existing.title !== feed.title ||
+        existing.url !== feed.url ||
+        existing.path !== feed.path ||
+        existing.kind !== feed.kind);
+
+    if (!existing || needsDiscoverySource || discoveredFieldsChanged) {
+      writes.set(feed.id, feed);
+    }
+  }
+
+  return [...writes.values()];
+}
+
+async function findDiscoveredRssFeedStates(
+  db: D1Database,
+  ids: readonly string[],
+): Promise<DiscoveredRssFeedState[]> {
+  const rows: DiscoveredRssFeedState[] = [];
+
+  for (const chunk of chunks(unique(ids), RSS_ROW_LOOKUP_CHUNK_SIZE)) {
+    const placeholders = chunk.map(() => "?").join(", ");
+    const result = await db
+      .prepare(
+        `select id, name, title, url, path, kind, source, discovered_from_url
+        from rss_feeds
+        where id in (${placeholders})`,
+      )
+      .bind(...chunk)
+      .all<DiscoveredRssFeedState>();
+    rows.push(...result.results);
+  }
+
+  return rows;
 }
 
 export type RssEntryUpsert = {
@@ -436,11 +612,20 @@ export type RssEntryIdentityRow = {
   tags_json: string;
 };
 
+export type RssEntryFeedIdentityRow = {
+  entry_id: string;
+  feed_id: string;
+};
+
 export async function upsertRssEntries(db: D1Database, entries: RssEntryUpsert[]): Promise<void> {
   if (entries.length === 0) return;
   const existingRows = await findExistingRssEntryIdentities(db, entries);
   const resolvedEntries = resolveRssEntryUpsertIds(entries, existingRows);
-  const writePlan = planRssEntryWrites(resolvedEntries, existingRows);
+  const existingRelations = await findExistingRssEntryFeedRelations(
+    db,
+    resolvedEntries.map((entry) => entry.id),
+  );
+  const writePlan = planRssEntryWrites(resolvedEntries, existingRows, existingRelations);
 
   const entryStatement = db.prepare(
     `insert into rss_entries (
@@ -477,9 +662,7 @@ export async function upsertRssEntries(db: D1Database, entries: RssEntryUpsert[]
       first_seen_at,
       last_seen_at
     ) values (?, ?, ?, ?)
-    on conflict(entry_id, feed_id) do update set
-      last_seen_at = excluded.last_seen_at
-    where rss_entry_feeds.last_seen_at < ?`,
+    on conflict(entry_id, feed_id) do nothing`,
   );
 
   await runStatementBatches(
@@ -499,10 +682,9 @@ export async function upsertRssEntries(db: D1Database, entries: RssEntryUpsert[]
           entry.canonicalUrl,
         ),
       ),
-      ...writePlan.relations.map((entry) => {
-        const touchCutoff = new Date(Date.parse(entry.fetchedAt) - RSS_ENTRY_FEED_TOUCH_INTERVAL_MS).toISOString();
-        return entryFeedStatement.bind(entry.id, entry.feedId, entry.fetchedAt, entry.fetchedAt, touchCutoff);
-      }),
+      ...writePlan.relations.map((entry) =>
+        entryFeedStatement.bind(entry.id, entry.feedId, entry.fetchedAt, entry.fetchedAt),
+      ),
     ],
   );
 }
@@ -512,8 +694,13 @@ export type RssEntryWritePlan = {
   relations: RssEntryUpsert[];
 };
 
-export function planRssEntryWrites(entries: RssEntryUpsert[], existingRows: RssEntryIdentityRow[]): RssEntryWritePlan {
+export function planRssEntryWrites(
+  entries: readonly RssEntryUpsert[],
+  existingRows: readonly RssEntryIdentityRow[],
+  existingRelations: readonly RssEntryFeedIdentityRow[],
+): RssEntryWritePlan {
   const existingById = new Map(existingRows.map((row) => [row.id, row]));
+  const existingRelationKeys = new Set(existingRelations.map((row) => rssEntryFeedKey(row.entry_id, row.feed_id)));
   const entriesById = new Map<string, RssEntryUpsert>();
   const relationsByKey = new Map<string, RssEntryUpsert>();
 
@@ -525,13 +712,19 @@ export function planRssEntryWrites(entries: RssEntryUpsert[], existingRows: RssE
       entriesById.set(entry.id, entry);
     }
 
-    relationsByKey.set(`${entry.id}\u0000${entry.feedId}`, entry);
+    relationsByKey.set(rssEntryFeedKey(entry.id, entry.feedId), entry);
   }
 
   return {
     entries: [...entriesById.values()].filter((entry) => needsRssEntryWrite(entry, existingById.get(entry.id))),
-    relations: [...relationsByKey.values()],
+    relations: [...relationsByKey.entries()]
+      .filter(([key]) => !existingRelationKeys.has(key))
+      .map(([, entry]) => entry),
   };
+}
+
+function rssEntryFeedKey(entryId: string, feedId: string): string {
+  return `${entryId}\u0000${feedId}`;
 }
 
 function needsRssEntryWrite(entry: RssEntryUpsert, existing: RssEntryIdentityRow | undefined): boolean {
@@ -580,6 +773,24 @@ async function findExistingRssEntryIdentities(db: D1Database, entries: RssEntryU
 
   for (const chunk of chunks(canonicalUrls, RSS_ENTRY_IDENTITY_LOOKUP_CHUNK_SIZE)) {
     rows.push(...(await selectRssEntryIdentities(db, "canonical_url", chunk)));
+  }
+
+  return rows;
+}
+
+export async function findExistingRssEntryFeedRelations(
+  db: D1Database,
+  entryIds: readonly string[],
+): Promise<RssEntryFeedIdentityRow[]> {
+  const rows: RssEntryFeedIdentityRow[] = [];
+
+  for (const chunk of chunks(unique(entryIds), RSS_ROW_LOOKUP_CHUNK_SIZE)) {
+    const placeholders = chunk.map(() => "?").join(", ");
+    const result = await db
+      .prepare(`select entry_id, feed_id from rss_entry_feeds where entry_id in (${placeholders})`)
+      .bind(...chunk)
+      .all<RssEntryFeedIdentityRow>();
+    rows.push(...result.results);
   }
 
   return rows;
@@ -707,7 +918,7 @@ async function runStatementBatches(db: D1Database, statements: D1PreparedStateme
   }
 }
 
-function chunks<T>(items: T[], size: number): T[][] {
+function chunks<T>(items: readonly T[], size: number): T[][] {
   const result: T[][] = [];
   for (let index = 0; index < items.length; index += size) {
     result.push(items.slice(index, index + size));
@@ -715,6 +926,6 @@ function chunks<T>(items: T[], size: number): T[][] {
   return result;
 }
 
-function unique<T>(items: T[]): T[] {
+function unique<T>(items: readonly T[]): T[] {
   return [...new Set(items)];
 }

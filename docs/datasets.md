@@ -273,8 +273,10 @@ curl "https://civic-koriyama-data.alflag.org/api/v2/datasets/aed/records?limit=1
 | `dataset_id` | string | 元データが属するデータセット ID。 |
 | `source_record_key` | string or null | 元データ側の識別キー。ない場合は `null`。 |
 | `source_row_hash` | string | 元データ行から計算したハッシュ。 |
-| `fetched_at` | string | API 側で元データを取得した日時。ISO 8601 形式。 |
+| `fetched_at` | string | 現在返している元データ行の内容を最後に保存した日時。ISO 8601 形式。 |
 | `raw` | object | 元データ行。キー名と値は出典ファイルに依存します。 |
+
+元データ行の内容が変わらない取得では `fetched_at` は更新されません。データセット全体の直近取得成功日時と取得ログは `/api/v2/health` の `data.datasets.last_success_at` と `data.datasets.recent_fetches` で確認してください。
 
 ## カテゴリ
 
