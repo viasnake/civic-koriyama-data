@@ -151,7 +151,7 @@ curl https://civic-koriyama-data.alflag.org/api/v2/datasets
 | `category` | API 側のカテゴリ |
 | `source_page_url` | 出典ページ URL |
 | `source_files` | 出典ファイルの配列 |
-| `format` | `csv_or_xlsx`、`zip`、`mixed` のいずれか |
+| `format` | `csv`、`csv_or_xlsx`、`zip`、`mixed` のいずれか |
 | `enabled` | API で有効かどうか |
 | `public_api` | 公開 API の対象かどうか |
 | `warnings` | 注意事項 |

@@ -1,97 +1,52 @@
 import { parse } from "yaml";
-import {
-  KORIYAMA_DISASTER_OPEN_DATA_URL,
-  KORIYAMA_PUBLIC_FACILITIES_URL,
-} from "../sources/koriyama";
+import { KORIYAMA_OPEN_DATA_INDEX_URL } from "../sources/koriyama";
 import type { DatasetCatalog, DatasetCatalogItem, DatasetSourceFile, RssCategory } from "../types";
 
-const ATTACHMENT_BASE_URL = "https://www.city.koriyama.lg.jp/uploaded/attachment";
+const OPEN_DATA_FILE_BASE_URL = "https://www.city.koriyama.lg.jp/uploaded/life";
+const OPEN_DATA_PAGE_LABEL = "郡山市のオープンデータ";
 
-function csv(id: number, label: string): DatasetSourceFile {
+function csv(file: string, label: string, encoding = "utf-8"): DatasetSourceFile {
   return {
     label,
-    url: `${ATTACHMENT_BASE_URL}/${id}.csv`,
+    url: `${OPEN_DATA_FILE_BASE_URL}/${file}`,
     file_type: "csv",
-    encoding: "shift_jis",
+    encoding,
     normalize: true,
   };
 }
 
-function zip(id: number, label: string, warnings: string[]): DatasetSourceFile {
-  return {
-    label,
-    url: `${ATTACHMENT_BASE_URL}/${id}.zip`,
-    file_type: "zip",
-    normalize: false,
-    warnings,
-  };
-}
-
-const PUBLIC_FACILITY_FILES = [
-  csv(1705, "市の行政サービス"),
-  csv(1706, "ふれあいセンター・コミュニティセンター"),
-  csv(1707, "公民館"),
-  csv(1708, "保健所"),
-  csv(1709, "病院"),
-  csv(1710, "福祉・子育て支援施設"),
-  csv(1711, "働く人のための施設"),
-  csv(1712, "上下水道局"),
-  csv(1713, "衛生"),
-  csv(1714, "霊園"),
-  csv(1715, "火葬場"),
-  csv(1716, "消防"),
-  csv(1717, "郡山水防センター"),
-  csv(1718, "保育所（認可保育所）"),
-  csv(1719, "その他の私立保育園"),
-  csv(1720, "幼稚園（私立幼稚園）"),
-  csv(1721, "小学校"),
-  csv(1722, "中学校"),
-  csv(1723, "文化・教育・社会施設"),
-  csv(1724, "スポーツ施設"),
-  csv(1725, "観光・産業施設"),
-  csv(1726, "市営住宅"),
-];
-
+// File names are published on the open data index page (郡山市のオープンデータ).
 const DATASET_SOURCE_FILES: Record<string, DatasetSourceFile[]> = {
-  public_facilities: PUBLIC_FACILITY_FILES,
-  aed: [csv(1727, "AED設置施設")],
-  public_wifi: [csv(1728, "Wi-Fi設置施設")],
-  public_toilets: [csv(1729, "オストメイト対応トイレ設置施設")],
-  childcare_facilities: [
-    csv(1710, "福祉・子育て支援施設"),
-    csv(1718, "保育所（認可保育所）"),
-    csv(1719, "その他の私立保育園"),
-    csv(1720, "幼稚園（私立幼稚園）"),
-  ],
-  medical_institutions: [csv(1708, "保健所"), csv(1709, "病院")],
-  schools: [csv(1721, "小学校"), csv(1722, "中学校")],
-  shelters: [
-    zip(1627, "指定避難場所", ["unsupported_shapefile_zip"]),
-    zip(1637, "緊急避難場所", ["unsupported_shapefile_zip"]),
-    zip(1638, "収容避難場所", ["unsupported_shapefile_zip"]),
-  ],
+  public_facilities: [csv("192867_453609_misc.csv", "公共施設一覧")],
+  aed: [csv("192867_453615_misc.csv", "AED設置個所一覧")],
+  public_wifi: [csv("192867_453614_misc.csv", "公衆無線LANアクセスポイント一覧")],
+  public_toilets: [csv("192867_453620_misc.csv", "公衆トイレ一覧")],
+  childcare_facilities: [csv("192867_453613_misc.csv", "子育て施設一覧")],
+  medical_institutions: [csv("192867_453617_misc.csv", "医療機関一覧")],
+  schools: [csv("192867_453625_misc.csv", "学校一覧", "shift_jis")],
+  shelters: [csv("192867_453611_misc.csv", "指定緊急避難場所一覧")],
 };
 
 const DATASET_SOURCE_PAGES: Record<string, string> = {
-  public_facilities: KORIYAMA_PUBLIC_FACILITIES_URL,
-  aed: KORIYAMA_PUBLIC_FACILITIES_URL,
-  public_wifi: KORIYAMA_PUBLIC_FACILITIES_URL,
-  public_toilets: KORIYAMA_PUBLIC_FACILITIES_URL,
-  childcare_facilities: KORIYAMA_PUBLIC_FACILITIES_URL,
-  medical_institutions: KORIYAMA_PUBLIC_FACILITIES_URL,
-  schools: KORIYAMA_PUBLIC_FACILITIES_URL,
-  shelters: KORIYAMA_DISASTER_OPEN_DATA_URL,
+  public_facilities: KORIYAMA_OPEN_DATA_INDEX_URL,
+  aed: KORIYAMA_OPEN_DATA_INDEX_URL,
+  public_wifi: KORIYAMA_OPEN_DATA_INDEX_URL,
+  public_toilets: KORIYAMA_OPEN_DATA_INDEX_URL,
+  childcare_facilities: KORIYAMA_OPEN_DATA_INDEX_URL,
+  medical_institutions: KORIYAMA_OPEN_DATA_INDEX_URL,
+  schools: KORIYAMA_OPEN_DATA_INDEX_URL,
+  shelters: KORIYAMA_OPEN_DATA_INDEX_URL,
 };
 
 const DATASET_SOURCE_PAGE_LABELS: Record<string, string> = {
-  public_facilities: "公共施設等情報",
-  aed: "公共施設等情報",
-  public_wifi: "公共施設等情報",
-  public_toilets: "公共施設等情報",
-  childcare_facilities: "公共施設等情報",
-  medical_institutions: "公共施設等情報",
-  schools: "公共施設等情報",
-  shelters: "防災情報",
+  public_facilities: OPEN_DATA_PAGE_LABEL,
+  aed: OPEN_DATA_PAGE_LABEL,
+  public_wifi: OPEN_DATA_PAGE_LABEL,
+  public_toilets: OPEN_DATA_PAGE_LABEL,
+  childcare_facilities: OPEN_DATA_PAGE_LABEL,
+  medical_institutions: OPEN_DATA_PAGE_LABEL,
+  schools: OPEN_DATA_PAGE_LABEL,
+  shelters: OPEN_DATA_PAGE_LABEL,
 };
 
 export const KORIYAMA_CATALOG_YAML = `version: 1
@@ -166,9 +121,9 @@ datasets:
     public_api: true
   - id: shelters
     name: 指定緊急避難場所一覧
-    source_page: opendata_disaster
+    source_page: opendata_index
     source_type: file
-    format: zip
+    format: csv
     category: disaster
     enabled: true
     normalize_as: place

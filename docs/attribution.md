@@ -4,9 +4,7 @@
 
 ## 出典
 
-- [郡山市オープンデータ](https://www.city.koriyama.lg.jp/soshiki/21/176730.html)
-- [公共施設等情報](https://www.city.koriyama.lg.jp/soshiki/21/176727.html)
-- [防災情報](https://www.city.koriyama.lg.jp/soshiki/21/176726.html)
+- [郡山市のオープンデータ](https://www.city.koriyama.lg.jp/soshiki/21/176730.html)
 - [郡山市公式サイト RSS 配信の案内](https://www.city.koriyama.lg.jp/site/userguide/25998.html)
 - [新着情報 RSS フィード](https://www.city.koriyama.lg.jp/rss/10/list1.xml)
 

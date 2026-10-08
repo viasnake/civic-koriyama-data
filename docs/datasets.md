@@ -29,9 +29,9 @@
 | `childcare_facilities` | 子育て施設一覧 | `childcare` | `csv_or_xlsx` | あり | 福祉・子育て支援施設、保育所、幼稚園など |
 | `medical_institutions` | 医療機関一覧 | `medical` | `csv_or_xlsx` | あり | 保健所、病院 |
 | `schools` | 学校一覧 | `education` | `csv_or_xlsx` | あり | 小学校、中学校 |
-| `shelters` | 指定緊急避難場所一覧 | `disaster` | `zip` | なし | 防災情報の出典メタデータ。公式ファイルが ZIP shapefile のため、地点正規化は未対応 |
+| `shelters` | 指定緊急避難場所一覧 | `disaster` | `csv` | あり | 指定緊急避難場所、災害種別、想定収容人数 |
 
-正規化ありのデータセットは、`/places`、`/places.geojson`、`/search` から共通フィールドの地点データとしても取得できます。`shelters` は出典メタデータと元ファイル情報のみを公開しています。
+正規化ありのデータセットは、`/places`、`/places.geojson`、`/search` から共通フィールドの地点データとしても取得できます。
 
 (datasets-list)=
 ## `GET /api/v2/datasets`
@@ -73,13 +73,13 @@ Query パラメータはありません。
       "id": "aed",
       "name": "AED設置個所一覧",
       "source_page": "opendata_index",
-      "source_page_url": "https://www.city.koriyama.lg.jp/soshiki/21/176727.html",
+      "source_page_url": "https://www.city.koriyama.lg.jp/soshiki/21/176730.html",
       "source_files": [
         {
-          "label": "AED設置施設",
-          "url": "https://www.city.koriyama.lg.jp/uploaded/attachment/1727.csv",
+          "label": "AED設置個所一覧",
+          "url": "https://www.city.koriyama.lg.jp/uploaded/life/192867_453615_misc.csv",
           "file_type": "csv",
-          "encoding": "shift_jis",
+          "encoding": "utf-8",
           "normalize": true
         }
       ],
@@ -89,7 +89,7 @@ Query パラメータはありません。
       "normalize_as": "place",
       "enabled": true,
       "public_api": true,
-      "source_page_label": "公共施設等情報"
+      "source_page_label": "郡山市のオープンデータ"
     }
   ]
 }
@@ -136,13 +136,13 @@ curl https://civic-koriyama-data.alflag.org/api/v2/datasets/aed
     "id": "aed",
     "name": "AED設置個所一覧",
     "source_page": "opendata_index",
-    "source_page_url": "https://www.city.koriyama.lg.jp/soshiki/21/176727.html",
+    "source_page_url": "https://www.city.koriyama.lg.jp/soshiki/21/176730.html",
     "source_files": [
       {
-        "label": "AED設置施設",
-        "url": "https://www.city.koriyama.lg.jp/uploaded/attachment/1727.csv",
+        "label": "AED設置個所一覧",
+        "url": "https://www.city.koriyama.lg.jp/uploaded/life/192867_453615_misc.csv",
         "file_type": "csv",
-        "encoding": "shift_jis",
+        "encoding": "utf-8",
         "normalize": true
       }
     ],
@@ -152,7 +152,7 @@ curl https://civic-koriyama-data.alflag.org/api/v2/datasets/aed
     "normalize_as": "place",
     "enabled": true,
     "public_api": true,
-    "source_page_label": "公共施設等情報"
+    "source_page_label": "郡山市のオープンデータ"
   }
 }
 ```
@@ -247,7 +247,7 @@ curl "https://civic-koriyama-data.alflag.org/api/v2/datasets/aed/records?limit=1
 | `source_page_url` | string | 出典ページ URL。 |
 | `source_files` | array | 出典ファイルの配列。 |
 | `source_type` | string | 現在は `file`。 |
-| `format` | string | `csv_or_xlsx`、`zip`、`mixed` のいずれか。 |
+| `format` | string | `csv`、`csv_or_xlsx`、`zip`、`mixed` のいずれか。 |
 | `category` | string | API 側のカテゴリ。 |
 | `normalize_as` | string | 正規化先の種類。現在は `place`。 |
 | `enabled` | boolean | API 側で有効なデータセットかどうか。 |
@@ -294,7 +294,6 @@ curl "https://civic-koriyama-data.alflag.org/api/v2/datasets/aed/records?limit=1
 | 値 | 出る場所 | 内容 |
 | --- | --- | --- |
 | `disaster_data` | `data.warnings[]` | 防災系データセットです。出典や更新状況を公式ページで確認してください。 |
-| `unsupported_shapefile_zip` | `source_files[].warnings[]` | 公式ファイルが ZIP shapefile のため、現在は地点データへ正規化していません。 |
 
 警告値は今後追加される可能性があります。未知の警告値を受け取っても処理が止まらないようにしてください。
 

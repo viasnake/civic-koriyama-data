@@ -11,6 +11,11 @@ export function firstString(row: Record<string, unknown>, keys: string[]): strin
   return null;
 }
 
+export function joinedString(row: Record<string, unknown>, keys: string[]): string | null {
+  const parts = keys.map((key) => normalizeText(row[key])).filter((value) => value !== "");
+  return parts.length > 0 ? parts.join("") : null;
+}
+
 export function parseNumber(value: unknown): number | null {
   const text = normalizeText(value);
   if (text === "") return null;
